@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/blog/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/blog/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/blog/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/blog/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Glide,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="关于图片的那点事儿Q: 一张大小为 55KB, 分辨率为 1080 * 480 的 PNG 图片，它加载近内存时所占的大小是多少呢？ 图片内存大小图片占用内存大小 = 分辨率 * 像素点大小">
+<meta name="keywords" content="Glide">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Glide 源码分析(1):图片压缩">
+<meta property="og:url" content="https://chinachen01.github.io/blog/2019/01/04/Glide-源码分析-1-图片压缩/index.html">
+<meta property="og:site_name" content="Deep in coding">
+<meta property="og:description" content="关于图片的那点事儿Q: 一张大小为 55KB, 分辨率为 1080 * 480 的 PNG 图片，它加载近内存时所占的大小是多少呢？ 图片内存大小图片占用内存大小 = 分辨率 * 像素点大小">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/11/28/16758dd15e3f1421?w=479&h=272&f=jpeg&s=68187">
+<meta property="og:updated_time" content="2019-01-04T03:14:51.335Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Glide 源码分析(1):图片压缩">
+<meta name="twitter:description" content="关于图片的那点事儿Q: 一张大小为 55KB, 分辨率为 1080 * 480 的 PNG 图片，它加载近内存时所占的大小是多少呢？ 图片内存大小图片占用内存大小 = 分辨率 * 像素点大小">
+<meta name="twitter:image" content="https://user-gold-cdn.xitu.io/2018/11/28/16758dd15e3f1421?w=479&h=272&f=jpeg&s=68187">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/blog/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://chinachen01.github.io/blog/2019/01/04/Glide-源码分析-1-图片压缩/">
+
+
+
+
+
+  <title>Glide 源码分析(1):图片压缩 | Deep in coding</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/blog/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Deep in coding</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/blog/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/blog/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/blog/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/blog/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://chinachen01.github.io/blog/blog/2019/01/04/Glide-源码分析-1-图片压缩/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Yong">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Deep in coding">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Glide 源码分析(1):图片压缩</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-04T10:40:05+08:00">
+                2019-01-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="关于图片的那点事儿"><a href="#关于图片的那点事儿" class="headerlink" title="关于图片的那点事儿"></a>关于图片的那点事儿</h2><p>Q: 一张大小为 55KB, 分辨率为 1080 * 480 的 PNG 图片，它加载近内存时所占的大小是多少呢？</p>
+<h3 id="图片内存大小"><a href="#图片内存大小" class="headerlink" title="图片内存大小"></a>图片内存大小</h3><p>图片占用内存大小 = 分辨率 * 像素点大小</p>
+<a id="more"></a> 
+<p>其中数据格式不同像素点大小也不同：</p>
+<ul>
+<li>ALPHA_8: 1B</li>
+<li>RGB_565: 2B</li>
+<li>ARGB_4444: 2B</li>
+<li>ARGB_8888: 4B</li>
+<li>RGBA_F16: 8B</li>
+</ul>
+<p>现在回过头来看上面的问题，在电脑上显示 55KB 的图片，png 只是这张图片的容器，他们是经过相对应的压缩算法将原图的每个像素点信息转换为另一种数据格式。</p>
+<p>在一般情况下，这张图片占用的内容应该是：1080 <em> 480 </em> 4B = 1.98 M。</p>
+<p>每种设备都会有所差异，以 android 为例，我们将同一张图片放在不同 dpi 的 res/drawable 目录下，占用的内存也不一样。</p>
+<p>这是因为在 android 中 <code>Bitmap.decodeResource()</code>会根据图片存放的目录做一次宽高的转换，具体公式如下：</p>
+<p>转换后高度 = 原图高度 * （设备的 dpi /目录对应的 dpi ）</p>
+<p>转换后宽度 = 原图宽度 * （设备的 dip / 目录对应的 dpi）</p>
+<p>假设你的手机 dpi 是 320（对应 xhdpi），你将上述的图片放在 xhdpi 目录下：</p>
+<p>图片占用内存 = 1080 <em> (320 / 320) </em> 480 <em> (320 / 320) </em> 4B = 1.98 M</p>
+<p>同样的手机，将上述图片放到 hdpi (240 dpi) 目录下：</p>
+<p>图片占用内存 = 1080 <em> (320 / 240) </em> 480 <em> (320 / 240) </em> 4B = 3.52 M</p>
+<blockquote>
+<p>如果需要查看手机 density 相关配置，可以使用如下命令：</p>
+<p>adb shell cat system/build.prop|grep density</p>
+<p>该命令可得到手机的 dpi，平常我们在布局中的单位都是 dp，那 1 dp 等于多少 px 呢。</p>
+<p>根据官方转换公式在 160 dpi 手机下 1 dp 等于 1 px，如果手机 dpi 为 440 dpi，则 1 dp = 2.75 px</p>
+</blockquote>
+<h3 id="如何降低一张图片占用的内存"><a href="#如何降低一张图片占用的内存" class="headerlink" title="如何降低一张图片占用的内存"></a>如何降低一张图片占用的内存</h3><h4 id="Bitmap-相关属性说明"><a href="#Bitmap-相关属性说明" class="headerlink" title="Bitmap 相关属性说明"></a>Bitmap 相关属性说明</h4><p>简单了解下BitmapOption的几个相关属性:</p>
+<ul>
+<li>inBitmap——在解析Bitmap时重用该Bitmap，不过必须等大的Bitmap而且inMutable须为true</li>
+<li>inMutable——配置Bitmap是否可以更改，比如：在Bitmap上隔几个像素加一条线段</li>
+<li>inJustDecodeBounds——为true仅返回Bitmap的宽高等属性</li>
+<li>inSampleSize——须&gt;=1,表示Bitmap的压缩比例，如：inSampleSize=4，将返回一个是原始图的1/16大小的</li>
+<li>Bitmap</li>
+<li>inPreferredConfig——Bitmap.Config.ARGB_8888等</li>
+<li>inDither——是否抖动，默认为false</li>
+<li>inPremultiplied——默认为true，一般不改变它的值</li>
+<li>inDensity——Bitmap的像素密度</li>
+<li>inTargetDensity——Bitmap最终的像素密度</li>
+<li>inScreenDensity——当前屏幕的像素密度</li>
+<li>inScaled——是否支持缩放，默认为true，当设置了这个，Bitmap将会以inTargetDensity的值进行缩放</li>
+<li>inPurgeable——当存储Pixel的内存空间在系统内存不足时是否可以被回收</li>
+<li>inInputShareable——inPurgeable为true情况下才生效，是否可以共享一个InputStream</li>
+<li>inPreferQualityOverSpeed——为true则优先保证Bitmap质量其次是解码速度</li>
+<li>outWidth——返回的Bitmap的宽</li>
+<li>outHeight——返回的Bitmap的高</li>
+<li>inTempStorage——解码时的临时空间，建议16*1024</li>
+</ul>
+<h3 id="降低分辨率"><a href="#降低分辨率" class="headerlink" title="降低分辨率"></a>降低分辨率</h3><p>android 系统提供了相应的 api 可以按比例压缩图片 <code>BitmapFactory.Options.inSampleSize</code> inSampleSzie 值越大，压缩比例越高</p>
+<h3 id="改变数据格式"><a href="#改变数据格式" class="headerlink" title="改变数据格式"></a>改变数据格式</h3><p> android 系统默认以 ARGB_8888 格式处理图片，那么每个像素点就需要占用 4B 大小，可以将格式改为 RGB_565</p>
+<h2 id="Glide-中的图片压缩"><a href="#Glide-中的图片压缩" class="headerlink" title="Glide 中的图片压缩"></a>Glide 中的图片压缩</h2><h3 id="图片加载的简单过程"><a href="#图片加载的简单过程" class="headerlink" title="图片加载的简单过程"></a>图片加载的简单过程</h3><p>我们使用 <strong>Glide</strong> 加载图片的最后一步是 <code>#into(ImageView)</code> 我们直接定位到 <code>RequestBuilder#into(ImageView)</code> 方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">BaseRequestOptions&lt;?&gt; requestOptions = <span class="keyword">this</span>;</span><br><span class="line">... <span class="comment">// 根据 ImageView 原生的 scale type 构建 Glide 的 scale type</span></span><br><span class="line">Request = buildRequest(target, targetListener, options) <span class="comment">// 这里最终调用的是 SingleRequest.obtain() 来创建 request</span></span><br><span class="line">requestManager.track(target, request); <span class="comment">//从这里开始请求 URL 加载图片</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>在 tarck() 方法中执行了 targetTracker.track(target)，而这行代码就是用来跟踪生命周期的</p>
+</blockquote>
+<p>如果我们是从网络加载图片，当图片下载成功后会回调 <code>SingleRequest#onResourceReady(Resource&lt;?&gt; resource, DataSource dataSource)</code>方法。</p>
+<p>而图片的下载及解码起始于 <code>SingleRequest#onSizeReady</code>,然后调用 <code>Engine#load()</code> 开始下载及解码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">... <span class="comment">//省略分别从内存，disk 读取图片代码</span></span><br><span class="line">EnginJob&lt;R&gt; engineJob = engineJobFactory.build();</span><br><span class="line">DecodeJob&lt;R&gt; decodeJob = decodeJobFacotry.build();</span><br><span class="line">josbs.put(key, enginJob);</span><br><span class="line">engineJob.addCallback(cb);</span><br><span class="line">engineJob.start(decodeJob); <span class="comment">//开始解码工作</span></span><br></pre></td></tr></table></figure>
+<p>最后调用 <code>DecodePath#decodeResourceWithList()</code>，关键代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Resource&lt;ResourceType&gt; result = <span class="keyword">null</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>, size = decoders.size(); i &lt; size; i++) &#123;</span><br><span class="line">    ResourceDecoder&lt;DataType, ResourceType&gt; decoder = decoders.get(i);</span><br><span class="line">    result = decoder.decode(data, width, height, options);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> result;</span><br></pre></td></tr></table></figure>
+<h3 id="图片解码"><a href="#图片解码" class="headerlink" title="图片解码"></a>图片解码</h3><p>接下来分析图片的解码过程。</p>
+<p>首先我们需要搞清楚 decoders 是怎么来的，原来在初始化 Glide 时会将 Glide 支持的所有 Decoder 注册到 decoderRegistry 中，最终调用 <code>ResourceDecoderRegistry#getDecoders()</code>方法来获取所需要的 decoders:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">synchronized</span> &lt;T, R&gt; List&lt;ResourceDecoder&lt;T, R&gt;&gt; getDecoders(<span class="meta">@NonNull</span> Class&lt;T&gt; dataClass,</span><br><span class="line">     <span class="meta">@NonNull</span> Class&lt;R&gt; resourceClass) &#123;</span><br><span class="line">   List&lt;ResourceDecoder&lt;T, R&gt;&gt; result = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">   <span class="keyword">for</span> (String bucket : bucketPriorityList) &#123;</span><br><span class="line">     List&lt;Entry&lt;?, ?&gt;&gt; entries = decoders.get(bucket);</span><br><span class="line">     <span class="keyword">if</span> (entries == <span class="keyword">null</span>) &#123;</span><br><span class="line">       <span class="keyword">continue</span>;</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="keyword">for</span> (Entry&lt;?, ?&gt; entry : entries) &#123;</span><br><span class="line">       <span class="keyword">if</span> (entry.handles(dataClass, resourceClass)) &#123;</span><br><span class="line">         result.add((ResourceDecoder&lt;T, R&gt;) entry.decoder);</span><br><span class="line">       &#125;</span><br><span class="line">     &#125;</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="comment">// <span class="doctag">TODO:</span> cache result list.</span></span><br><span class="line"></span><br><span class="line">   <span class="keyword">return</span> result;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>在<strong>Glide</strong>中 ResourceDecoder 的实现类有很多，如下图所示</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/11/28/16758dd15e3f1421?w=479&amp;h=272&amp;f=jpeg&amp;s=68187" alt="image-20181102103614160"></p>
+<p>Glide 根据图片的资源类型会调用不同的 Decoder 进行解码，现在我们以最常见的场景，加载网络图片来说明。加载网络图片（PNG格式）调用的是 <strong>ByteBufferBitmapDecoder</strong>。</p>
+<blockquote>
+<p>不管是加载网络图片还是加载本地资源，都是通过 ByteBufferBitmapDecoder 类进行解码</p>
+</blockquote>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ByteBufferBitmapDecoder</span> <span class="keyword">implements</span> <span class="title">ResourceDecoder</span>&lt;<span class="title">ByteBuffer</span>, <span class="title">Bitmap</span>&gt; </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> Downsampler downsampler;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">ByteBufferBitmapDecoder</span><span class="params">(Downsampler downsampler)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.downsampler = downsampler;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">handles</span><span class="params">(@NonNull ByteBuffer source, @NonNull Options options)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> downsampler.handles(source);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> Resource&lt;Bitmap&gt; <span class="title">decode</span><span class="params">(@NonNull ByteBuffer source, <span class="keyword">int</span> width, <span class="keyword">int</span> height,</span></span></span><br><span class="line"><span class="function"><span class="params">      @NonNull Options options)</span></span></span><br><span class="line"><span class="function">      <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    InputStream is = ByteBufferUtil.toStream(source);</span><br><span class="line">    <span class="keyword">return</span> downsampler.decode(is, width, height, options);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>该类很简单，最主要的是调用<code>Downsampler#decode</code>方法，Downsampler 直译向下采样器，接下来就重点看下该类。</p>
+<h4 id="Downsampler"><a href="#Downsampler" class="headerlink" title="Downsampler"></a>Downsampler</h4><p>首先来看 <code>Downsampler</code>对外提供的方法 <code>decode</code>方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"> <span class="function"><span class="keyword">public</span> Resource&lt;Bitmap&gt; <span class="title">decode</span><span class="params">(InputStream is, <span class="keyword">int</span> requestedWidth, <span class="keyword">int</span> requestedHeight,</span></span></span><br><span class="line"><span class="function"><span class="params">     Options options, DecodeCallbacks callbacks)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">   Preconditions.checkArgument(is.markSupported(), <span class="string">"You must provide an InputStream that supports"</span></span><br><span class="line">       + <span class="string">" mark()"</span>);</span><br><span class="line"><span class="comment">/* 开始构建 BitmpFactory.Options */</span></span><br><span class="line">   <span class="keyword">byte</span>[] bytesForOptions = byteArrayPool.get(ArrayPool.STANDARD_BUFFER_SIZE_BYTES, <span class="keyword">byte</span>[].class);</span><br><span class="line">   BitmapFactory.Options bitmapFactoryOptions = getDefaultOptions();</span><br><span class="line">   bitmapFactoryOptions.inTempStorage = bytesForOptions;</span><br><span class="line"></span><br><span class="line">   DecodeFormat decodeFormat = options.get(DECODE_FORMAT);</span><br><span class="line">   DownsampleStrategy downsampleStrategy = options.get(DownsampleStrategy.OPTION);</span><br><span class="line">   <span class="keyword">boolean</span> fixBitmapToRequestedDimensions = options.get(FIX_BITMAP_SIZE_TO_REQUESTED_DIMENSIONS);</span><br><span class="line">   <span class="keyword">boolean</span> isHardwareConfigAllowed =</span><br><span class="line">     options.get(ALLOW_HARDWARE_CONFIG) != <span class="keyword">null</span> &amp;&amp; options.get(ALLOW_HARDWARE_CONFIG);</span><br><span class="line"></span><br><span class="line">   <span class="keyword">try</span> &#123;</span><br><span class="line">     Bitmap result = decodeFromWrappedStreams(is, bitmapFactoryOptions,</span><br><span class="line">         downsampleStrategy, decodeFormat, isHardwareConfigAllowed, requestedWidth,</span><br><span class="line">         requestedHeight, fixBitmapToRequestedDimensions, callbacks);</span><br><span class="line">     <span class="keyword">return</span> BitmapResource.obtain(result, bitmapPool);</span><br><span class="line">   &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">     releaseOptions(bitmapFactoryOptions);</span><br><span class="line">     byteArrayPool.put(bytesForOptions);</span><br><span class="line">   &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>该方法首先为 <strong>BitmapFactory.Options</strong> 设置所需要的参数</p>
+<ol>
+<li><p>inTempStorage</p>
+<p>Temp storage to use for decoding.  Suggest 16K or so. Glide 在这里用的是 64k</p>
+</li>
+<li><p>decodeFormat</p>
+<p>解码格式, glide 中的图片主要为两种模式 ARGB_8888, RGB_565</p>
+</li>
+<li><p>fixBitmapToRequestedDimensions</p>
+<p>默认为 false（暂时不太理解这个属性的含义，也无法设置成 true）</p>
+</li>
+<li><p>isHardwareConfigAllowed</p>
+<p><a href="https://muyangmin.github.io/glide-docs-cn/doc/hardwarebitmaps.html" target="_blank" rel="noopener">硬件位图</a></p>
+<p>默认禁用</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">boolean</span> isHardwareConfigSafe =</span><br><span class="line">    dataSource == DataSource.RESOURCE_DISK_CACHE || decodeHelper.isScaleOnlyOrNoTransform();</span><br><span class="line">Boolean isHardwareConfigAllowed = options.get(Downsampler.ALLOW_HARDWARE_CONFIG);</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>接下来通过  <strong>decodeFromWrappedStream</strong> 获取 <strong>bitmap</strong>，该方法主要逻辑如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span>[] sourceDimensions = getDimensions(is, options, callbacks, bitmapPool); <span class="comment">//获取原始图片的宽高</span></span><br><span class="line">    <span class="keyword">int</span> targetWidth = requestedWidth == Target.SIZE_ORIGINAL ? sourceWidth : requestedWidth;</span><br><span class="line">    <span class="keyword">int</span> targetHeight = requestedHeight == Target.SIZE_ORIGINAL ? sourceHeight : requestedHeight;</span><br><span class="line">calculateScaling(); <span class="comment">//设置 inSampleSize 缩放(采样)比例</span></span><br><span class="line">calculateConfig();</span><br><span class="line">Bitmap downsampled = decodeStream(is, options, callbacks, bitmapPool);</span><br><span class="line">callbacks.onDecodeComplete(bitmapPool, downsampled);</span><br></pre></td></tr></table></figure>
+<p>我们先来理清这几个size,以 width 为例</p>
+<ol>
+<li>sourceWidth: 即你从网络下载的原始图片的宽</li>
+<li>requestedWidth: 默认为 ImageView 的宽</li>
+<li>targeWidth: 最终生成的 bitmap 的宽</li>
+</ol>
+<p>接下来分析 <strong>calculateScaling</strong> 方法</p>
+<p>由于都是计算相关，所以举个栗子，假设图片的sourceWidth 为 1000， targetWidth为 200， sourceHeight为 1200， targetWidth 为 300</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> <span class="keyword">float</span> exactScaleFactor = downsampleStrategy.getScaleFactor(sourceWidth, sourceHeight, targetWidth, targetHeight); <span class="comment">//假设向下采样策略为 CenterOutside 实现，则exactScaleFactor 等于 0.25</span></span><br><span class="line">SampleSizeRounding rounding = downsampleStrategy.getSampleSizeRounding(sourceWidth,</span><br><span class="line">        sourceHeight, targetWidth, targetHeight); <span class="comment">//rouding 为 QUALITY</span></span><br><span class="line"><span class="keyword">int</span> outWidth = round(exactScaleFactor * sourceWidth); <span class="comment">//outWidth = 0.25*1000 + 0.5 = 250</span></span><br><span class="line"><span class="keyword">int</span> outHeight = round(exactScaleFactor * sourceHeight); <span class="comment">// outHeight = 0.25*1200 + 0.5 = 300 </span></span><br><span class="line"><span class="keyword">int</span> widthScaleFactor = sourceWidth / outWidth; <span class="comment">//widthScaleFactor = 1000/250 = 4</span></span><br><span class="line"><span class="keyword">int</span> heightScaleFactor = sourceHeight / outHeight; <span class="comment">//heightScalFactor = 1200/300 = 4</span></span><br><span class="line"><span class="keyword">int</span> scaleFactor = rounding == SampleSizeRounding.MEMORY <span class="comment">//scaleFactor = 4</span></span><br><span class="line">        ? Math.max(widthScaleFactor, heightScaleFactor)</span><br><span class="line">        : Math.min(widthScaleFactor, heightScaleFactor);</span><br><span class="line"><span class="keyword">int</span> powerOfTwoSampleSize  = Math.max(<span class="number">1</span>, Integer.highestOneBit(scaleFactor)); <span class="comment">//powerOfTowSampleSize = 4，且只可能是 1，2，4，8，16 ...</span></span><br><span class="line"><span class="keyword">if</span> (rounding == SampleSizeRounding.MEMORY</span><br><span class="line">          &amp;&amp; powerOfTwoSampleSize &lt; (<span class="number">1</span>.f / exactScaleFactor)) &#123;</span><br><span class="line">        powerOfTwoSampleSize = powerOfTwoSampleSize &lt;&lt; <span class="number">1</span>;</span><br><span class="line">      &#125;</span><br><span class="line">&#125;</span><br><span class="line">options.inSampleSize = powerOfTwoSampleSize;</span><br><span class="line"><span class="comment">// 这里暂时还不太理解，看算法这里的 inTragetDesity 和 inDensity 的比值永远为 1</span></span><br><span class="line"><span class="keyword">if</span> (Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.KITKAT) &#123;</span><br><span class="line">  options.inTargetDensity = adjustTargetDensityForError(adjustedScaleFactor);</span><br><span class="line">  options.inDensity = getDensityMultiplier(adjustedScaleFactor);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span> (isScaling(options)) &#123;</span><br><span class="line">  options.inScaled = <span class="keyword">true</span>;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">  options.inDensity = options.inTargetDensity = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们简单看下 <code>CenterOutside</code>类，代码很简单：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">float</span> <span class="title">getScaleFactor</span><span class="params">(<span class="keyword">int</span> sourceWidth, <span class="keyword">int</span> sourceHeight, <span class="keyword">int</span> requestedWidth,</span></span></span><br><span class="line"><span class="function"><span class="params">      <span class="keyword">int</span> requestedHeight)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">float</span> widthPercentage = requestedWidth / (<span class="keyword">float</span>) sourceWidth;</span><br><span class="line">    <span class="keyword">float</span> heightPercentage = requestedHeight / (<span class="keyword">float</span>) sourceHeight;</span><br><span class="line">    <span class="keyword">return</span> Math.max(widthPercentage, heightPercentage);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> SampleSizeRounding <span class="title">getSampleSizeRounding</span><span class="params">(<span class="keyword">int</span> sourceWidth, <span class="keyword">int</span> sourceHeight,</span></span></span><br><span class="line"><span class="function"><span class="params">      <span class="keyword">int</span> requestedWidth, <span class="keyword">int</span> requestedHeight)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> SampleSizeRounding.QUALITY; <span class="comment">// 返回值有 QUALITY 和 MEMORY,其中 MEMORY 相比较 QUALITY 会占用更少内存</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>接下来通过调用<strong>calculateConfig</strong>为 <strong>options</strong> 设置其他属性</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (hardwareConfigState.setHardwareConfigIfAllowed(</span><br><span class="line">    targetWidth,</span><br><span class="line">    targetHeight,</span><br><span class="line">    optionsWithScaling,</span><br><span class="line">    format,</span><br><span class="line">    isHardwareConfigAllowed,</span><br><span class="line">    isExifOrientationRequired)) &#123;</span><br><span class="line">  <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Changing configs can cause skewing on 4.1, see issue #128.</span></span><br><span class="line"><span class="keyword">if</span> (format == DecodeFormat.PREFER_ARGB_8888</span><br><span class="line">    || Build.VERSION.SDK_INT == Build.VERSION_CODES.JELLY_BEAN) &#123;</span><br><span class="line">  optionsWithScaling.inPreferredConfig = Bitmap.Config.ARGB_8888;</span><br><span class="line">  <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">boolean</span> hasAlpha = <span class="keyword">false</span>;</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">  hasAlpha = ImageHeaderParserUtils.getType(parsers, is, byteArrayPool).hasAlpha();</span><br><span class="line">&#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">  <span class="keyword">if</span> (Log.isLoggable(TAG, Log.DEBUG)) &#123;</span><br><span class="line">    Log.d(TAG, <span class="string">"Cannot determine whether the image has alpha or not from header"</span></span><br><span class="line">        + <span class="string">", format "</span> + format, e);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">optionsWithScaling.inPreferredConfig =</span><br><span class="line">    hasAlpha ? Bitmap.Config.ARGB_8888 : Bitmap.Config.RGB_565;</span><br><span class="line"><span class="keyword">if</span> (optionsWithScaling.inPreferredConfig == Config.RGB_565) &#123;</span><br><span class="line">  optionsWithScaling.inDither = <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最终调用 <code>ecodeStream</code> 方法，该方法通过对 android api  <code>BitmapFactory#decodeStream</code>对图片进行压缩获得了 <strong>bitmap</strong> 对象</p>
+<p>特别注意的是我们在使用 Glide 时加载的网络图片时，默认都是根据 ImageView 的尺寸大小进行了一定比例的，详细的计算过程在上文中也已经提到。但在实际应用中会有希望让用户看到原图场景，这个时候我们可以这样操作</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ImgurGlide.with(vh.imageView)</span><br><span class="line">    .load(image.link)</span><br><span class="line">    .diskCacheStrategy(DiskCacheStrategy.RESOURCE) <span class="comment">// 硬盘缓存保存原图</span></span><br><span class="line">    .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL) <span class="comment">// 重载 requestSize，避免 bitmap 被压缩</span></span><br><span class="line">    .into(vh.imageView);</span><br></pre></td></tr></table></figure>
+<h2 id="Skia-库"><a href="#Skia-库" class="headerlink" title="Skia 库"></a>Skia 库</h2><p>在 android 中， <code>BitmapFactory.decodeStream</code> 调用的是 natvie 方法，该函数最终调用的是 skia 库中的encodeStream函数来对图片进行压缩编码。接下来大致介绍一下skia库。</p>
+<p>Skia 是一个 c++实现的代码库，在android 中以扩展库的形式存在，目录为external/skia/。总体来说skia是个相对简单的库，在android中提供了基本的画图和简单的编解码功能。另外，skia 同样可以挂接其他第3方编码解码库或者硬件编解码库，例如libpng和libjpeg。在Android中skia就是这么做的，\external\skia\src\images文件夹下面，有几个SkImageDecoder_xxx.cpp文件，他们都是继承自SkImageDecoder.cpp类，并利用第三方库对相应类型文件解码，最后再通过SkTRegistry注册，代码如下所示<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> SkTRegistry&lt;SkImageDecoder*, SkStream*&gt; gDReg(sk_libjpeg_dfactory);</span><br><span class="line"><span class="keyword">static</span> SkTRegistry&lt;SkImageDecoder::Format, SkStream*&gt; gFormatReg(get_format_jpeg);</span><br><span class="line"><span class="keyword">static</span> SkTRegistry&lt;SkImageEncoder*, SkImageEncoder::Type&gt; gEReg(sk_libjpeg_efactory);</span><br></pre></td></tr></table></figure></p>
+<p>Android编码保存图片就是通过Java层函数——Native层函数——Skia库函数——对应第三方库函数（例如libjpeg），这一层层调用做到的。</p>
+<p>最后推荐一个第三方库<a href="https://github.com/wasabeef/glide-transformations" target="_blank" rel="noopener">glide-transformations</a>，可以实现很多图片效果，比如圆角，高斯模糊，黑白。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/blog/tags/Glide/" rel="tag"># Glide</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/2019/01/04/阿里巴巴开源路由框架-ARouter-分析/" rel="next" title="阿里巴巴开源路由框架 - ARouter 分析">
+                <i class="fa fa-chevron-left"></i> 阿里巴巴开源路由框架 - ARouter 分析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Yong</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/blog/archives/">
+              
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/blog/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/blog/tags/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#关于图片的那点事儿"><span class="nav-number">1.</span> <span class="nav-text">关于图片的那点事儿</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#图片内存大小"><span class="nav-number">1.1.</span> <span class="nav-text">图片内存大小</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何降低一张图片占用的内存"><span class="nav-number">1.2.</span> <span class="nav-text">如何降低一张图片占用的内存</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Bitmap-相关属性说明"><span class="nav-number">1.2.1.</span> <span class="nav-text">Bitmap 相关属性说明</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#降低分辨率"><span class="nav-number">1.3.</span> <span class="nav-text">降低分辨率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#改变数据格式"><span class="nav-number">1.4.</span> <span class="nav-text">改变数据格式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Glide-中的图片压缩"><span class="nav-number">2.</span> <span class="nav-text">Glide 中的图片压缩</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#图片加载的简单过程"><span class="nav-number">2.1.</span> <span class="nav-text">图片加载的简单过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#图片解码"><span class="nav-number">2.2.</span> <span class="nav-text">图片解码</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Downsampler"><span class="nav-number">2.2.1.</span> <span class="nav-text">Downsampler</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Skia-库"><span class="nav-number">3.</span> <span class="nav-text">Skia 库</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Yong</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/blog/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/blog/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/blog/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/blog/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

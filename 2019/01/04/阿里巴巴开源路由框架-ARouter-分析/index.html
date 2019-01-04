@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/blog/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/blog/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/blog/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/blog/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Alibaba,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Arouter 一个用于帮助 Android App 进行组件化改造的框架 —— 支持模块间的路由、通信、解耦">
+<meta name="keywords" content="Alibaba">
+<meta property="og:type" content="article">
+<meta property="og:title" content="阿里巴巴开源路由框架 - ARouter 分析">
+<meta property="og:url" content="https://chinachen01.github.io/blog/2019/01/04/阿里巴巴开源路由框架-ARouter-分析/index.html">
+<meta property="og:site_name" content="Deep in coding">
+<meta property="og:description" content="Arouter 一个用于帮助 Android App 进行组件化改造的框架 —— 支持模块间的路由、通信、解耦">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/10/10/1665d1cb909418e8?w=1098&h=740&f=jpeg&s=128265">
+<meta property="og:updated_time" content="2019-01-04T03:15:26.059Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="阿里巴巴开源路由框架 - ARouter 分析">
+<meta name="twitter:description" content="Arouter 一个用于帮助 Android App 进行组件化改造的框架 —— 支持模块间的路由、通信、解耦">
+<meta name="twitter:image" content="https://user-gold-cdn.xitu.io/2018/10/10/1665d1cb909418e8?w=1098&h=740&f=jpeg&s=128265">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/blog/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://chinachen01.github.io/blog/2019/01/04/阿里巴巴开源路由框架-ARouter-分析/">
+
+
+
+
+
+  <title>阿里巴巴开源路由框架 - ARouter 分析 | Deep in coding</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/blog/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Deep in coding</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/blog/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/blog/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/blog/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/blog/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://chinachen01.github.io/blog/blog/2019/01/04/阿里巴巴开源路由框架-ARouter-分析/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Yong">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Deep in coding">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">阿里巴巴开源路由框架 - ARouter 分析</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-04T10:39:00+08:00">
+                2019-01-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p> <a href="https://github.com/alibaba/ARouter/blob/master/README_CN.md" target="_blank" rel="noopener">Arouter</a> 一个用于帮助 Android App 进行组件化改造的框架 —— 支持模块间的路由、通信、解耦</p>
+</blockquote>
+<a id="more"></a> 
+<h2 id="技术准备"><a href="#技术准备" class="headerlink" title="技术准备"></a>技术准备</h2><ol>
+<li><a href="https://juejin.im/post/5bbda7e0f265da0a9624efcf" target="_blank" rel="noopener">SPI</a></li>
+<li><a href="https://juejin.im/post/5bbda8b86fb9a05cde1d7407" target="_blank" rel="noopener">APT</a></li>
+</ol>
+<h2 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h2><p>我们直接看官方 demo，核心模块包括<strong>api</strong>,<strong>compiler</strong>,<strong>annotation</strong>, 首先先简单讲一下各模块的作用：</p>
+<ul>
+<li>Annoation: 定义注解和 Route 相关的基本信息</li>
+<li>Compiler: 主要是用来在编译期间处理注解Router/Interceptor/Autowire三个注解，在编译期间自动注册注解标注的类，成员变量等。</li>
+<li>Api: 用户调用的核心 api</li>
+</ul>
+<h3 id="annoation"><a href="#annoation" class="headerlink" title="annoation"></a>annoation</h3><p><strong>Autowired</strong> 用于注解 field, 可实现路由件传递参数的自动注入，无需使用者在代码中去获取传递的参数，注意，注解对象的修饰符不能是 private。</p>
+<p><strong>Interceptor</strong> 用于注解拦截器，拦截器的概念请参考官方文档</p>
+<p><strong>Route</strong> 路由注解，可以是 Activity，也可以是 Service</p>
+<p><strong>RouteMeta</strong> 路由相关的数据，包括路由类型，路径，组，权重，参数等信息 </p>
+<h3 id="compiler"><a href="#compiler" class="headerlink" title="compiler"></a>compiler</h3><h4 id="RouteProcessor"><a href="#RouteProcessor" class="headerlink" title="RouteProcessor"></a>RouteProcessor</h4><p>路由注解器</p>
+<p>关键方法 <code>#parseRoutes#</code>,我们先看这个方法最后生成的文件到底是啥，弄清楚了才能更容易的理清代码。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ARouter</span>$$<span class="title">Root</span>$$<span class="title">app</span> <span class="keyword">implements</span> <span class="title">IRouteRoot</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> ARouter$$Root$$app() &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">loadInto</span><span class="params">(Map&lt;String, Class&lt;? extends IRouteGroup&gt;&gt; routes)</span> </span>&#123;</span><br><span class="line">        routes.put(<span class="string">"service"</span>, service.class);</span><br><span class="line">        routes.put(<span class="string">"test"</span>, test.class);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意map 存入的key 分别是 service 和 test，valude 则对应为 ARouter$$Group$$service.class 和 ARouter$$Group$$test.class。一个组件有且只有一个 Root 类，不同的组件以后缀作为区分。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ARouter</span>$$<span class="title">Group</span>$$<span class="title">test</span> <span class="keyword">implements</span> <span class="title">IRouteGroup</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> ARouter$$Group$$test() &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">loadInto</span><span class="params">(Map&lt;String, RouteMeta&gt; atlas)</span> </span>&#123;</span><br><span class="line">  		atlas.put(<span class="string">"/test/*"</span>, RouteMeta)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ARouter</span>$$<span class="title">Group</span>$$<span class="title">service</span> <span class="keyword">implements</span> <span class="title">IRouteGroup</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> ARouter$$Group$$service() &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">loadInto</span><span class="params">(Map&lt;String, RouteMeta&gt; atlas)</span> </span>&#123;</span><br><span class="line">   		atlas.put(<span class="string">"/service/*"</span>, RouteMeta)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意 Arouter$$Group$$test 中 map 的 key 必然是以 “/test” 为前缀，刚好与其后缀相同</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ARouter</span>$$<span class="title">Providers</span>$$<span class="title">app</span> <span class="keyword">implements</span> <span class="title">IProviderGroup</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> ARouter$$Providers$$app() &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">loadInto</span><span class="params">(Map&lt;String, RouteMeta&gt; providers)</span> </span>&#123;</span><br><span class="line">        providers.put(className, RouteMeta)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ARouter</span>$$<span class="title">Interceptors</span>$$<span class="title">app</span> <span class="keyword">implements</span> <span class="title">IInterceptorGroup</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> ARouter$$Interceptors$$app() &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">loadInto</span><span class="params">(Map&lt;Integer, Class&lt;? extends IInterceptor&gt;&gt; interceptors)</span> </span>&#123;</span><br><span class="line">        interceptors.put(privority, Class);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>小结一下：</p>
+<ol>
+<li>在一个module中，自动生成的 IRouteRoot 类有且只有一个，后缀为 module 名</li>
+<li>在一个module中，自动生成的 IRouteGroup 类可以有多个，且都会在 IRouteRoot 类中注册</li>
+<li>IProviderGroup 只有一个，后缀为 module 名<blockquote>
+<p>准确来说后缀并不是 module 名，实际上你可以在 gradle 中指定，后续在讲解 parseRoutes 方法时会讲到具体原因</p>
+</blockquote>
+</li>
+</ol>
+<p>接下来将讲解 <code>RouteProcessor#parseRoutes</code> 方法:</p>
+<ol>
+<li>拿到 Route，根据 RouteType 构建 RouteMeta，并通过 #categoryies 方法构建映射关系存储到 groupMap(groupMap 的 key 为 routeName ，value 则是 RouteMeta 集合)</li>
+<li>遍历 groupMap 创建 ARouter\$\$Group\$\$groupName 类, 同时将 groupName 与生成的 File 的全类名的映射关系存储到 rootName</li>
+<li>创建 ARouter\$\$Providers\$\$moduleName 类</li>
+<li>创建 ARouter\$\$Rout\$\$moudleName</li>
+</ol>
+<p>其中 groupName  就是你在注解中设置的 group，但我们平时在使用 ARouter 的时候很少回去设置 group, 如果你没有指定 group，Arouter 会默认使用 path 的主路径，比如你指定了 path = “/test/main”, 那 groupName 就是 test; moudleName 则由你在 gradle 中指定。</p>
+<h4 id="AutoWiredProccesor"><a href="#AutoWiredProccesor" class="headerlink" title="AutoWiredProccesor"></a>AutoWiredProccesor</h4><p>首先看一下生成的文件：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test1Activity</span>$$<span class="title">ARouter</span>$$<span class="title">Autowired</span> <span class="keyword">implements</span> <span class="title">ISyringe</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> SerializationService serializationService;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> Test1Activity$$ARouter$$Autowired() &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">inject</span><span class="params">(Object target)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.serializationService = (SerializationService)ARouter.getInstance().navigation(SerializationService.class);</span><br><span class="line">        Test1Activity substitute = (Test1Activity)target;</span><br><span class="line">        substitute.name = substitute.getIntent().getStringExtra(<span class="string">"name"</span>);</span><br><span class="line">       ...</span><br><span class="line">        substitute.helloService = (HelloService)ARouter.getInstance().navigation(HelloService.class);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>生成的 class 继承之 <code>ISyring</code>只有一个方法 inject(Object),该方法的实现主要做了两件事：</p>
+<ol>
+<li><p><code>AutoWired</code> 注解的 filed 如果是 <code>service</code> (Arouter 中继承自 IProvider), 则初始化对象：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">substitute.helloService = (HelloService)ARouter.getInstance().navigation(HelloService.class);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>AutoWried</code> 注解的 filed 非 <code>service</code>,则从 bundle 中获取相应的 value 赋值给该 field:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">substitute.helloService = (HelloService)ARouter.getInstance().navigation(HelloService.class); <span class="comment">// activity</span></span><br><span class="line">substitute.name = substitute.getArguments().getString(<span class="string">"name"</span>); <span class="comment">// fragment</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>最后生成类名\$\$Arouter\$\$AutoWired.class 文件</p>
+</li>
+</ol>
+<h4 id="InterceptorProccessor"><a href="#InterceptorProccessor" class="headerlink" title="InterceptorProccessor"></a>InterceptorProccessor</h4><p>拦截注解生成器</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ARouter</span>$$<span class="title">Interceptors</span>$$<span class="title">app</span> <span class="keyword">implements</span> <span class="title">IInterceptorGroup</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> ARouter$$Interceptors$$app() &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">loadInto</span><span class="params">(Map&lt;Integer, Class&lt;? extends IInterceptor&gt;&gt; interceptors)</span> </span>&#123;</span><br><span class="line">        interceptors.put(<span class="number">7</span>, Test1Interceptor.class);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="api"><a href="#api" class="headerlink" title="api"></a>api</h3><h4 id="ARouter-amp-ARouter"><a href="#ARouter-amp-ARouter" class="headerlink" title="ARouter &amp; _ARouter"></a>ARouter &amp; _ARouter</h4><p>launcher 下只有两个类 <code>ARouter</code>, <code>_ARouter</code>, <code>ARouter</code> 采用单例模式，对外提供 ARouter 相关 API,我们在调用<code>ARouter.getInstance().build()</code>时 真正调用的是<code>_ARouter</code>的相关方法，这里采用了代理模式，现在我们就开始以 ARouter 向外提供的方法来逐步分析：</p>
+<p>首先看<code>init()</code>:<br>在 Arouter 库中，有一个 <code>Warehose</code>类，它存储了路由相关的信息，我们在使用 ARouter 之前必须要先调用 init 方法，而 <code>init</code>方法就是需要将信息存储到 <code>Warehose</code> 中<br>以下为时序图：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/10/10/1665d1cb909418e8?w=1098&amp;h=740&amp;f=jpeg&amp;s=128265" alt="WX20181010-163208"></p>
+<p> 通过调用<code>#loadInto(Warehose)</code>方法，成功地将信息存储到 <code>Warehose</code>。</p>
+<p>现在<code>Warehose</code> 的 groupsIndex, providersIndex, interceptorsIndex 已经被我们存入了路由信息</p>
+<p>最后再调用<code>_ARouter#afterInit()</code>实例化 interceptorService</p>
+<p>接下来是 <code>navigation()</code>方法:</p>
+<p>我们需要先了解<code>Postcard</code> 类,<code>Postcard</code> 继承 <code>RouteMeta</code>，扩展了一些属性，例如：flag(activity 的 flag)，uri，provider，anim(动画)。我们平时在是用 Arouter 时 build 方法返回的就是 <code>Postcasrd</code>, <code>postcard#navigation</code> 方法，最终调用的是就是 <code>_Arouter#navaigation</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">LogisticsCenter.completion(postcard);</span><br><span class="line"><span class="keyword">if</span>(!postcard.isGreenChannel()) &#123;</span><br><span class="line">    <span class="comment">// 拦截器相关，暂时跳过</span></span><br><span class="line">    interceptorSevice.doInterceptions(post, <span class="keyword">new</span> InterceptorCallback() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onContinue</span><span class="params">(Postcard postcard)</span> </span>&#123;</span><br><span class="line">            _navigation(context, postcard, requestCode, callback);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> _navigation(context, postcard, requestCode, callback);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>首先我们来看<code>LogisticsCenter#completion(Postcard)</code>方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">RouteMeta routeMeta = Warehouse.routes.get(postcard.getPath());</span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">null</span> == routeMeta) &#123;</span><br><span class="line">    Class&lt;? extends IRouteGroup&gt; groupMeta = Warehouse.groupsIndex.get(postcard.getGroup());  <span class="comment">// Load route meta.</span></span><br><span class="line">    IRouteGroup iGroupInstance = groupMeta.getConstructor().newInstance(); <span class="comment">// ARouter$$Group%%test 对象实例化</span></span><br><span class="line">    iGroupInstance.loadInto(Warehouse.routes);</span><br><span class="line">    Warehouse.groupsIndex.remove(postcard.getGroup());</span><br><span class="line">    completion(postcard);   <span class="comment">// Reload 进入 else 分支</span></span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    ... <span class="comment">// postcadrd 设置属性如：destination,type,priority等</span></span><br><span class="line">    <span class="keyword">switch</span>(routeMeta.getType) &#123;</span><br><span class="line">        <span class="keyword">case</span> PROVIDER:</span><br><span class="line">            Class&lt;? extends IProvider&gt; providerMeta = (Class&lt;? extends IProvider&gt;) routeMeta.getDestination();</span><br><span class="line">            IProvider instance = Warehouse.providers.get(providerMeta);</span><br><span class="line">            <span class="keyword">if</span>(instance == <span class="keyword">null</span>) &#123;</span><br><span class="line">                IProvider povider = providerMeta.getConstructor().newInstance();</span><br><span class="line">                provider.init(mContext); <span class="comment">// init 方法只在创建 provider 对象后调用一次,</span></span><br><span class="line">                Warehose.providers.put(providerMeta, provider); <span class="comment">// 存入 map，除非调用 ARouter#destory, 该 provider 对象会一直存在 map 中</span></span><br><span class="line">                postcard.setProvider(instance);</span><br><span class="line">                postcard.greenChannel();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> FRAGMENT:</span><br><span class="line">            ...</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>到这里面 <code>Warehose</code> 中的 <code>routes</code> 和<code>providers</code>也被我们放入了相应信息</p>
+<p><code>_navigation()</code>方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">switch</span>(postcard.getType()) &#123;</span><br><span class="line">    <span class="keyword">case</span> ACTIVITY:</span><br><span class="line">        ... <span class="comment">// build intent</span></span><br><span class="line">        startActivity(requestCode, currentCotext, intent, postcard, callback);</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> POSTCARD:</span><br><span class="line">        <span class="keyword">return</span> postcard.getProvider();</span><br><span class="line">    <span class="keyword">case</span> Fragment:</span><br><span class="line">        Fragment fragment = fragmentMeta.getConstructor().newInstance();</span><br><span class="line">        fragment.setArguments(postcard.getExtras());</span><br><span class="line">        <span class="keyword">return</span> fragment;</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> <span class="keyword">null</span>;</span><br></pre></td></tr></table></figure>
+<p>接下来分析 <code>ARroute#inject(Object)方法：</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">AutowiredService autowiredService = ((AutowiredService) ARouter.getInstance().build(<span class="string">"/arouter/service/autowired"</span>).navigation());</span><br><span class="line">autowiredService.autowire(objec);</span><br></pre></td></tr></table></figure>
+<p>代码很简单，关键是 AutowiredService 的实现</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">autowire</span><span class="params">(Object instance)</span> </span>&#123;</span><br><span class="line">    String className = instance.getClass().getName();</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (!blackList.contains(className)) &#123;</span><br><span class="line">            ISyringe autowiredHelper = classCache.get(className);</span><br><span class="line">            <span class="keyword">if</span> (<span class="keyword">null</span> == autowiredHelper) &#123;  <span class="comment">// No cache.</span></span><br><span class="line">                autowiredHelper = (ISyringe) Class.forName(instance.getClass().getName() + SUFFIX_AUTOWIRED).getConstructor().newInstance(); <span class="comment">// $$ARouter$$Autowired = $$ARouter$$Autowired</span></span><br><span class="line">            &#125;</span><br><span class="line">            autowiredHelper.inject(instance); <span class="comment">// Text1Activity$$ARouter$$Autowired.inject(this) 取出 bundle 中传递的参数</span></span><br><span class="line">            classCache.put(className, autowiredHelper);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception ex) &#123;</span><br><span class="line">        blackList.add(className);    <span class="comment">// This instance need not autowired.</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>到这里，所有的注解生成的 class 的作用及其实现方法的调用时机都已经介绍到了，相信读者应该对 ARouter 有了新的了解了吧。接下来讲一下我们平时比较少用到的 interceptor</p>
+<p><code>ARouter</code>官方为我们提供了一个拦截器的使用场景:</p>
+<blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; 比较经典的应用就是在跳转过程中处理登陆事件，这样就不需要在目标页重复做登陆检查</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>还记得在讲解 <code>ARroute#navigation</code>时我们跳过了拦截器相关的内容吗</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(!postcard.isGreenChannel()) &#123;</span><br><span class="line">    <span class="comment">// 拦截器相关，暂时跳过</span></span><br><span class="line">    interceptorSevice.doInterceptions(post, <span class="keyword">new</span> InterceptorCallback() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onContinue</span><span class="params">(Postcard postcard)</span> </span>&#123;</span><br><span class="line">            _navigation(context, postcard, requestCode, callback);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>只要是拦截器，一般都会使用责任链设计模式，在 <code>ARouter</code>中也不例外,我们先看 <code>interceptorService</code>的创建过程，它的 type 是 Provider，在创建后会首先调用 <code>init</code>方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">(<span class="keyword">final</span> Context context)</span> </span>&#123;</span><br><span class="line">    LogisticsCenter.executor.execute(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                <span class="keyword">for</span>(entry : Warehose.interceptorsIndex) &#123;</span><br><span class="line">                    Class&lt;? extends IInterceptor&gt; interceptorClass = entry.getValue();</span><br><span class="line">                    IInterceptor iInterceptor = interceptorClass.getConstructor().newInstance();</span><br><span class="line">                    iInterceptor.init(context);</span><br><span class="line">                    Warehose.interceptors.add(iInterceptor);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>interceptorService#doInterceptions 调用 _excute 方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">_excute</span><span class="params">(<span class="keyword">final</span> <span class="keyword">int</span> index, <span class="keyword">final</span> CancelableCountDownLatch counter, <span class="keyword">final</span> Postcard postcard)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (index &lt; Warehouse.interceptors.size()) &#123;</span><br><span class="line">        IInterceptor iInterceptor = Warehouse.interceptors.get(index);</span><br><span class="line">        iInterceptor.process(postcard, <span class="keyword">new</span> InterceptorCallback() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onContinue</span><span class="params">(Postcard postcard)</span> </span>&#123;</span><br><span class="line">                <span class="comment">// Last interceptor excute over with no exception.</span></span><br><span class="line">                counter.countDown();</span><br><span class="line">                _excute(index + <span class="number">1</span>, counter, postcard);  <span class="comment">// When counter is down, it will be execute continue ,but index bigger than interceptors size, then U know.</span></span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onInterrupt</span><span class="params">(Throwable exception)</span> </span>&#123;</span><br><span class="line">                <span class="comment">// Last interceptor excute over with fatal exception.</span></span><br><span class="line">                postcard.setTag(<span class="keyword">null</span> == exception ? <span class="keyword">new</span> HandlerException(<span class="string">"No message."</span>) : exception.getMessage());    <span class="comment">// save the exception message for backup.</span></span><br><span class="line">                counter.cancel();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="常见错误分析"><a href="#常见错误分析" class="headerlink" title="常见错误分析"></a>常见错误分析</h2><ol>
+<li><p>service 内存泄漏, 考虑以下代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloServiceImpl</span> <span class="keyword">implements</span> <span class="title">HelloService</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Context context;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.context = context</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">say</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Toast.makeText(context, R.string.hello, Toast.LENGTH_LONG).show();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>之前我们分析源码的时候就已经讲过了，service 的实现类在初始化后会被放入<code>Warehose.providers</code>，后续通过调用<code>ARouter.inject</code>都是从<code>Warehose.providers</code>中取出。在上面的代码中如果 context 是一个 activity 对象，将该 activity 赋值给了成员变量 context，则该 activity 对象不会被回收，造成了内存泄漏</p>
+</li>
+<li><p>混淆导致 service 为 null</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloHolder</span> </span>&#123;</span><br><span class="line">     <span class="meta">@Autowired</span>(name = <span class="string">"/service/hello"</span>)</span><br><span class="line">    HelloService helloService;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">HelloHolder</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        ARouter.getInstance().inject(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sayHello</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        helloSerice.say;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>该代码本身并没有问题，问题出在在 android 开发中我们需要混淆代码，大家还记得之前讲的 AutowiredService 的实现吧，关键代码在这里，</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="keyword">null</span> == autowiredHelper) &#123;  <span class="comment">// No cache.</span></span><br><span class="line">    autowiredHelper = (ISyringe) Class.forName(instance.getClass().getName() + SUFFIX_AUTOWIRED).getConstructor().newInstance(); <span class="comment">// $$ARouter$$Autowired = $$ARouter$$Autowired</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>本来 ARouter 构建的类名应该是 <code>HelloHolder$$ARouter$$Autowired</code>, 然后实例化该对象，调用该对象的 <code>#inject</code>方法，可是你现在将 <code>HelloHolder</code>混淆成了<code>H</code>,导致创建对象失败，这就是你为什么在代码中调用了 <code>ARouter.getInstance().inject(this)</code>，但是 service 还是为 null 的原因</p>
+<blockquote>
+<p>在 android 开发中，Activity，Fragment 我们在混淆规则中是配置了 keep 等规则的，所以不会有问题。但是像上文中 HelloHolder 这种情况常常被我们所忽略，在开发中一定要注意，建议采用注解方式来保持类名不被混淆。</p>
+</blockquote>
+</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/blog/tags/Alibaba/" rel="tag"># Alibaba</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/2019/01/04/Android-开发之-APT-技术/" rel="next" title="Android 开发之 APT 技术">
+                <i class="fa fa-chevron-left"></i> Android 开发之 APT 技术
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/2019/01/04/Glide-源码分析-1-图片压缩/" rel="prev" title="Glide 源码分析(1):图片压缩">
+                Glide 源码分析(1):图片压缩 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Yong</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/blog/archives/">
+              
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/blog/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/blog/tags/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#技术准备"><span class="nav-number">1.</span> <span class="nav-text">技术准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#源码分析"><span class="nav-number">2.</span> <span class="nav-text">源码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#annoation"><span class="nav-number">2.1.</span> <span class="nav-text">annoation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#compiler"><span class="nav-number">2.2.</span> <span class="nav-text">compiler</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#RouteProcessor"><span class="nav-number">2.2.1.</span> <span class="nav-text">RouteProcessor</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#AutoWiredProccesor"><span class="nav-number">2.2.2.</span> <span class="nav-text">AutoWiredProccesor</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#InterceptorProccessor"><span class="nav-number">2.2.3.</span> <span class="nav-text">InterceptorProccessor</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#api"><span class="nav-number">2.3.</span> <span class="nav-text">api</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ARouter-amp-ARouter"><span class="nav-number">2.3.1.</span> <span class="nav-text">ARouter &amp; _ARouter</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常见错误分析"><span class="nav-number">3.</span> <span class="nav-text">常见错误分析</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Yong</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/blog/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/blog/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/blog/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/blog/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

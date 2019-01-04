@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="APT,">
 
 
 
@@ -79,14 +79,18 @@
 
 
 
-<meta name="keywords" content="android java">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Deep in coding">
-<meta property="og:url" content="https://chinachen01.github.io/blog/index.html">
+<meta name="description" content="APT，就是Annotation Processing Tool 的简称，就是可以在代码编译期间对注解进行处理，并且生成Java文件，减少手动的代码输入。一些大名鼎鼎的框架如 Retrofit, Arouter 都运用了 APT 技术。 在本片文章中我们将利用 APT 技术实现类似 ARouter 的路由功能.">
+<meta name="keywords" content="APT">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android 开发之 APT 技术">
+<meta property="og:url" content="https://chinachen01.github.io/blog/2019/01/04/Android-开发之-APT-技术/index.html">
 <meta property="og:site_name" content="Deep in coding">
+<meta property="og:description" content="APT，就是Annotation Processing Tool 的简称，就是可以在代码编译期间对注解进行处理，并且生成Java文件，减少手动的代码输入。一些大名鼎鼎的框架如 Retrofit, Arouter 都运用了 APT 技术。 在本片文章中我们将利用 APT 技术实现类似 ARouter 的路由功能.">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-01-04T03:14:39.095Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Deep in coding">
+<meta name="twitter:title" content="Android 开发之 APT 技术">
+<meta name="twitter:description" content="APT，就是Annotation Processing Tool 的简称，就是可以在代码编译期间对注解进行处理，并且生成Java文件，减少手动的代码输入。一些大名鼎鼎的框架如 Retrofit, Arouter 都运用了 APT 技术。 在本片文章中我们将利用 APT 技术实现类似 ARouter 的路由功能.">
 
 
 
@@ -116,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="https://chinachen01.github.io/blog/">
+  <link rel="canonical" href="https://chinachen01.github.io/blog/2019/01/04/Android-开发之-APT-技术/">
 
 
 
 
 
-  <title>Deep in coding</title>
+  <title>Android 开发之 APT 技术 | Deep in coding</title>
   
 
 
@@ -141,8 +145,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
@@ -267,304 +270,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://chinachen01.github.io/blog/blog/2019/01/04/Glide-源码分析-1-图片压缩/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Yong">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/blog/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Deep in coding">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2019/01/04/Glide-源码分析-1-图片压缩/" itemprop="url">Glide 源码分析(1):图片压缩</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-04T10:40:05+08:00">
-                2019-01-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="关于图片的那点事儿"><a href="#关于图片的那点事儿" class="headerlink" title="关于图片的那点事儿"></a>关于图片的那点事儿</h2><p>Q: 一张大小为 55KB, 分辨率为 1080 * 480 的 PNG 图片，它加载近内存时所占的大小是多少呢？</p>
-<h3 id="图片内存大小"><a href="#图片内存大小" class="headerlink" title="图片内存大小"></a>图片内存大小</h3><p>图片占用内存大小 = 分辨率 * 像素点大小</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blog/2019/01/04/Glide-源码分析-1-图片压缩/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://chinachen01.github.io/blog/blog/2019/01/04/阿里巴巴开源路由框架-ARouter-分析/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Yong">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/blog/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Deep in coding">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2019/01/04/阿里巴巴开源路由框架-ARouter-分析/" itemprop="url">阿里巴巴开源路由框架 - ARouter 分析</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-04T10:39:00+08:00">
-                2019-01-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <blockquote>
-<p> <a href="https://github.com/alibaba/ARouter/blob/master/README_CN.md" target="_blank" rel="noopener">Arouter</a> 一个用于帮助 Android App 进行组件化改造的框架 —— 支持模块间的路由、通信、解耦</p>
-</blockquote>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blog/2019/01/04/阿里巴巴开源路由框架-ARouter-分析/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
 
   
 
@@ -594,9 +302,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2019/01/04/Android-开发之-APT-技术/" itemprop="url">Android 开发之 APT 技术</a></h1>
+          <h1 class="post-title" itemprop="name headline">Android 开发之 APT 技术</h1>
         
 
         <div class="post-meta">
@@ -668,312 +374,36 @@
       
 
       
-        
-          <p>APT，就是Annotation Processing Tool 的简称，就是可以在代码编译期间对注解进行处理，并且生成Java文件，减少手动的代码输入。一些大名鼎鼎的框架如 Retrofit, Arouter 都运用了 APT 技术。</p>
+        <p>APT，就是Annotation Processing Tool 的简称，就是可以在代码编译期间对注解进行处理，并且生成Java文件，减少手动的代码输入。一些大名鼎鼎的框架如 Retrofit, Arouter 都运用了 APT 技术。</p>
 <p>在本片文章中我们将利用 APT 技术实现类似 <a href="https://github.com/alibaba/ARouter/" target="_blank" rel="noopener">ARouter</a> 的路由功能.</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blog/2019/01/04/Android-开发之-APT-技术/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://chinachen01.github.io/blog/blog/2019/01/04/SPI-介绍与使用/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Yong">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/blog/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Deep in coding">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2019/01/04/SPI-介绍与使用/" itemprop="url">SPI 介绍与使用</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-04T10:36:52+08:00">
-                2019-01-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>SPI全称是Service Provider Interface，服务提供方接口，服务通常是指一个接口或者一个抽象类，服务提供方是对这个接口或者抽象类的具体实现，由第三方来实现接口提供具体的服务。SPI提供了一种动态的对应用程序进行扩展的机制，通常用作框架服务的拓展或者可替换的服务组件。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blog/2019/01/04/SPI-介绍与使用/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://chinachen01.github.io/blog/blog/2019/01/04/Android-Architecture-Components/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Yong">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/blog/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Deep in coding">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2019/01/04/Android-Architecture-Components/" itemprop="url">Android Architecture Components</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-04T10:18:22+08:00">
-                2019-01-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <blockquote>
-<p>Android Architecture Components 提供从管理 UI 组件的生命周期到处理数据持久性的一系列库，来帮助您设计健壮，易测试和维护的 App。</p>
+<a id="more"></a> 
+<p>不多说，先附上本文中的代码地址：<a href="https://github.com/chinachen01/APTdemo" target="_blank" rel="noopener">APTdemo</a></p>
+<p><a href="https://github.com/square/javapoet" target="_blank" rel="noopener">https://github.com/square/javapoet</a></p>
+<h2 id="实现效果"><a href="#实现效果" class="headerlink" title="实现效果"></a>实现效果</h2><p>常用的 Activity 跳转方式：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">startActivity(<span class="keyword">new</span> Intent(MainActivity.<span class="keyword">this</span>, TwoActivity.class));</span><br></pre></td></tr></table></figure>
+<p>我们希望通过以下方式达到 Activity 跳转的目的：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SRouter.getInstance().navigate(MainActivity.<span class="keyword">this</span>, <span class="string">"router_two"</span>);</span><br></pre></td></tr></table></figure>
+<h2 id="注解"><a href="#注解" class="headerlink" title="注解"></a>注解</h2><p>创建<code>annotation</code>library, 首先我们在 library 中定义注解，通过它我们可以找到哪些 Activity 需要添加到路由中</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.CLASS)</span><br><span class="line"><span class="meta">@Target</span>(ElementType.TYPE)</span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Router &#123;</span><br><span class="line">    <span class="function">String <span class="title">name</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="注解处理器-compile"><a href="#注解处理器-compile" class="headerlink" title="注解处理器 - compile"></a>注解处理器 - compile</h2><p>创建<code>compile</code>library,依赖 <code>annotation</code>模块， 注意创建的时候选择 <em>java-libray</em>， 创建<code>RouterProcessor</code>类继承自 AbstractProcessor。我们需要实现 4 个方法，前3个方法简单的写法很固定，简单讲一下他们的作用吧；</p>
+<ol>
+<li>init()方法可以初始化拿到一些使用的工具，比如文件相关的辅助类 Filer;元素相关的辅助类Elements;日志相关的辅助类Messager;</li>
+<li>getSupportedSourceVersion()方法返回 Java 版本; </li>
+<li>getSupportedAnnotationTypes()方法返回要处理的注解；</li>
+</ol>
+<p>其中最核心的是 <code>process()</code>方法，通过<a href="https://github.com/square/javapoet" target="_blank" rel="noopener">javapoet</a> 再结合注解我们就可以成相应的类。 最终我们希望生成的类是这样的：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Router</span>$$<span class="title">GroupApp</span> <span class="keyword">implements</span> <span class="title">IRouterGroup</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Map&lt;String, String&gt; routeMap = <span class="keyword">new</span> HashMap();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> Router$$GroupApp() &#123;</span><br><span class="line">        <span class="keyword">this</span>.routeMap.put(<span class="string">"router_two"</span>, <span class="string">"com.slyser.aptdemo.TwoActivity"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getActivityName</span><span class="params">(String routeName)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span> != <span class="keyword">this</span>.routeMap &amp;&amp; !<span class="keyword">this</span>.routeMap.isEmpty() ? (String)<span class="keyword">this</span>.routeMap.get(routeName) : <span class="string">""</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>实现代码并不复杂，就是写起来很繁琐，还好 <a href="https://github.com/square/javapoet" target="_blank" rel="noopener">javapoet</a> 为我们省了不少事。</p>
+<h2 id="注册注解处理器"><a href="#注册注解处理器" class="headerlink" title="注册注解处理器"></a>注册注解处理器</h2><p>编译的时候 <code>JVM</code> 怎么找到我们自定义的注解处理器？这个时候就要用到 <code>SPI</code> 机制。简单的用法就是在 <code>compile</code> 模块下新建 resources/META-INF/services 文件，创建这个文件很容易出错，大家可以使用 google 出品的 <code>auto-service</code>，通过注解就可以很方便的问我们创建相应的文件</p>
+<blockquote>
+<p>添加<code>auto-service</code>的 gradle 依赖:implementation ‘com.google.auto.service:auto-service:1.0-rc3’</p>
 </blockquote>
-<p>本文将简单介绍 Lifcycle, LiveData, ViewModel 的使用并对一些重要的源码进行分析</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blog/2019/01/04/Android-Architecture-Components/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
+<h2 id="核心库-api"><a href="#核心库-api" class="headerlink" title="核心库 - api"></a>核心库 - api</h2><p>创建 <code>api</code> library, 该库很简单，就只有 <code>SRouter</code> 一个类，核心就是反射创建注解处理器生成的对象，拿到 Activity 的 Class，完成 activity 的跳转.</p>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>在 Activity 上添加注解<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Router</span>(name = <span class="string">"router_two"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TwoActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span></span></span><br></pre></td></tr></table></figure></p>
+<p>跳转<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SRouter.getInstance().navigate(<span class="keyword">this</span>, <span class="string">"router_two"</span>);</span><br></pre></td></tr></table></figure></p>
+<p>这样一个简单的路由跳转就完成了</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><code>APT</code>技术其实就是自定义注解和注解处理器，在编译期间生成Java文件，类似于IOC控制反转，可以方便的进行解耦，在多模块开发时可以基于APT技术构造一套路由框架，去除startActivity等造成的类依赖。</p>
+
       
     </div>
     
@@ -988,14 +418,40 @@
 
     <footer class="post-footer">
       
-
+        <div class="post-tags">
+          
+            <a href="/blog/tags/APT/" rel="tag"># APT</a>
+          
+        </div>
       
 
       
+      
+      
 
       
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/2019/01/04/SPI-介绍与使用/" rel="next" title="SPI 介绍与使用">
+                <i class="fa fa-chevron-left"></i> SPI 介绍与使用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/2019/01/04/阿里巴巴开源路由框架-ARouter-分析/" rel="prev" title="阿里巴巴开源路由框架 - ARouter 分析">
+                阿里巴巴开源路由框架 - ARouter 分析 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
       
-        <div class="post-eof"></div>
+
+      
       
     </footer>
   </div>
@@ -1005,10 +461,11 @@
   </article>
 
 
-    
-  </section>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -1016,6 +473,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -1036,8 +497,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -1097,6 +567,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#实现效果"><span class="nav-number">1.</span> <span class="nav-text">实现效果</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注解"><span class="nav-number">2.</span> <span class="nav-text">注解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注解处理器-compile"><span class="nav-number">3.</span> <span class="nav-text">注解处理器 - compile</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注册注解处理器"><span class="nav-number">4.</span> <span class="nav-text">注册注解处理器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#核心库-api"><span class="nav-number">5.</span> <span class="nav-text">核心库 - api</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用"><span class="nav-number">6.</span> <span class="nav-text">使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">7.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -1230,6 +716,10 @@
   
 
   
+  <script type="text/javascript" src="/blog/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/blog/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 

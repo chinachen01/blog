@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="SPI,">
 
 
 
@@ -79,14 +79,20 @@
 
 
 
-<meta name="keywords" content="android java">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Deep in coding">
-<meta property="og:url" content="https://chinachen01.github.io/blog/index.html">
+<meta name="description" content="简介SPI全称是Service Provider Interface，服务提供方接口，服务通常是指一个接口或者一个抽象类，服务提供方是对这个接口或者抽象类的具体实现，由第三方来实现接口提供具体的服务。SPI提供了一种动态的对应用程序进行扩展的机制，通常用作框架服务的拓展或者可替换的服务组件。">
+<meta name="keywords" content="SPI">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SPI 介绍与使用">
+<meta property="og:url" content="https://chinachen01.github.io/blog/2019/01/04/SPI-介绍与使用/index.html">
 <meta property="og:site_name" content="Deep in coding">
+<meta property="og:description" content="简介SPI全称是Service Provider Interface，服务提供方接口，服务通常是指一个接口或者一个抽象类，服务提供方是对这个接口或者抽象类的具体实现，由第三方来实现接口提供具体的服务。SPI提供了一种动态的对应用程序进行扩展的机制，通常用作框架服务的拓展或者可替换的服务组件。">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/10/10/1665cd8138896f64?w=783&h=373&f=png&s=38648">
+<meta property="og:updated_time" content="2019-01-04T03:15:03.551Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Deep in coding">
+<meta name="twitter:title" content="SPI 介绍与使用">
+<meta name="twitter:description" content="简介SPI全称是Service Provider Interface，服务提供方接口，服务通常是指一个接口或者一个抽象类，服务提供方是对这个接口或者抽象类的具体实现，由第三方来实现接口提供具体的服务。SPI提供了一种动态的对应用程序进行扩展的机制，通常用作框架服务的拓展或者可替换的服务组件。">
+<meta name="twitter:image" content="https://user-gold-cdn.xitu.io/2018/10/10/1665cd8138896f64?w=783&h=373&f=png&s=38648">
 
 
 
@@ -116,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="https://chinachen01.github.io/blog/">
+  <link rel="canonical" href="https://chinachen01.github.io/blog/2019/01/04/SPI-介绍与使用/">
 
 
 
 
 
-  <title>Deep in coding</title>
+  <title>SPI 介绍与使用 | Deep in coding</title>
   
 
 
@@ -141,8 +147,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
@@ -267,451 +272,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://chinachen01.github.io/blog/blog/2019/01/04/Glide-源码分析-1-图片压缩/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Yong">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/blog/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Deep in coding">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2019/01/04/Glide-源码分析-1-图片压缩/" itemprop="url">Glide 源码分析(1):图片压缩</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-04T10:40:05+08:00">
-                2019-01-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="关于图片的那点事儿"><a href="#关于图片的那点事儿" class="headerlink" title="关于图片的那点事儿"></a>关于图片的那点事儿</h2><p>Q: 一张大小为 55KB, 分辨率为 1080 * 480 的 PNG 图片，它加载近内存时所占的大小是多少呢？</p>
-<h3 id="图片内存大小"><a href="#图片内存大小" class="headerlink" title="图片内存大小"></a>图片内存大小</h3><p>图片占用内存大小 = 分辨率 * 像素点大小</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blog/2019/01/04/Glide-源码分析-1-图片压缩/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://chinachen01.github.io/blog/blog/2019/01/04/阿里巴巴开源路由框架-ARouter-分析/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Yong">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/blog/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Deep in coding">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2019/01/04/阿里巴巴开源路由框架-ARouter-分析/" itemprop="url">阿里巴巴开源路由框架 - ARouter 分析</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-04T10:39:00+08:00">
-                2019-01-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <blockquote>
-<p> <a href="https://github.com/alibaba/ARouter/blob/master/README_CN.md" target="_blank" rel="noopener">Arouter</a> 一个用于帮助 Android App 进行组件化改造的框架 —— 支持模块间的路由、通信、解耦</p>
-</blockquote>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blog/2019/01/04/阿里巴巴开源路由框架-ARouter-分析/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://chinachen01.github.io/blog/blog/2019/01/04/Android-开发之-APT-技术/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Yong">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/blog/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Deep in coding">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2019/01/04/Android-开发之-APT-技术/" itemprop="url">Android 开发之 APT 技术</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-04T10:38:04+08:00">
-                2019-01-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>APT，就是Annotation Processing Tool 的简称，就是可以在代码编译期间对注解进行处理，并且生成Java文件，减少手动的代码输入。一些大名鼎鼎的框架如 Retrofit, Arouter 都运用了 APT 技术。</p>
-<p>在本片文章中我们将利用 APT 技术实现类似 <a href="https://github.com/alibaba/ARouter/" target="_blank" rel="noopener">ARouter</a> 的路由功能.</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blog/2019/01/04/Android-开发之-APT-技术/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
 
   
 
@@ -741,9 +304,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2019/01/04/SPI-介绍与使用/" itemprop="url">SPI 介绍与使用</a></h1>
+          <h1 class="post-title" itemprop="name headline">SPI 介绍与使用</h1>
         
 
         <div class="post-meta">
@@ -815,165 +376,38 @@
       
 
       
-        
-          <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>SPI全称是Service Provider Interface，服务提供方接口，服务通常是指一个接口或者一个抽象类，服务提供方是对这个接口或者抽象类的具体实现，由第三方来实现接口提供具体的服务。SPI提供了一种动态的对应用程序进行扩展的机制，通常用作框架服务的拓展或者可替换的服务组件。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blog/2019/01/04/SPI-介绍与使用/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://chinachen01.github.io/blog/blog/2019/01/04/Android-Architecture-Components/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Yong">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/blog/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Deep in coding">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2019/01/04/Android-Architecture-Components/" itemprop="url">Android Architecture Components</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-04T10:18:22+08:00">
-                2019-01-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <blockquote>
-<p>Android Architecture Components 提供从管理 UI 组件的生命周期到处理数据持久性的一系列库，来帮助您设计健壮，易测试和维护的 App。</p>
+        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>SPI全称是Service Provider Interface，服务提供方接口，服务通常是指一个接口或者一个抽象类，服务提供方是对这个接口或者抽象类的具体实现，由第三方来实现接口提供具体的服务。SPI提供了一种动态的对应用程序进行扩展的机制，通常用作框架服务的拓展或者可替换的服务组件。</p>
+<a id="more"></a> 
+<h2 id="SPI机制"><a href="#SPI机制" class="headerlink" title="SPI机制"></a>SPI机制</h2><ul>
+<li>在resources/META-INF/services/目录中创建以<code>服务全限定名</code>命名的文件，该文件内容为<code>服务的具体实现类的全限定名</code>，文件中可以写多个服务的具体实现类</li>
+<li>使用ServiceLoader类动态加载服务的具体实现类</li>
+<li>服务具体的实现类必须有一个不带参数的构造方法</li>
+</ul>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="定义接口或抽象类"><a href="#定义接口或抽象类" class="headerlink" title="定义接口或抽象类"></a>定义接口或抽象类</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">MessageService</span> </span>&#123;</span><br><span class="line">    <span class="function">String <span class="title">getMessage</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="实现接口"><a href="#实现接口" class="headerlink" title="实现接口"></a>实现接口</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AMessageService</span> <span class="keyword">implements</span> <span class="title">MessageService</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getMessage</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Hello from module A"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BMessageService</span> <span class="keyword">implements</span> <span class="title">MessageService</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getMessage</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Welcome from b"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="创建-SPI-描述文件"><a href="#创建-SPI-描述文件" class="headerlink" title="创建 SPI 描述文件"></a>创建 SPI 描述文件</h3><p>如下图所示，注意目录结构:</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/10/10/1665cd8138896f64?w=783&amp;h=373&amp;f=png&amp;s=38648" alt="spi 描述文件"></p>
+<blockquote>
+<p>可以使用 google 推出的 auto-service，它可以方便的帮我们生成对应的描述文件，用法很简单</p>
 </blockquote>
-<p>本文将简单介绍 Lifcycle, LiveData, ViewModel 的使用并对一些重要的源码进行分析</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blog/2019/01/04/Android-Architecture-Components/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
+<p>使用 auto-service:</p>
+<ol>
+<li>依赖 <code>implementation &#39;com.google.auto.service:auto-service:1.0-rc3&#39;</code></li>
+<li>在 Service 实现类使用注解 <code>@AutoService</code></li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@AutoService</span>(MessageService.class)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BMessageService</span> <span class="keyword">implements</span> <span class="title">MessageService</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getMessage</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Welcome from b"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="调用具体服务"><a href="#调用具体服务" class="headerlink" title="调用具体服务"></a>调用具体服务</h3><p>使用ServiceLoader去加载具体服务类，然后遍历具体的实现类，ServiceLoader其实就是去<code>META-INFO/services</code>目录下读取文件内容，然后实例化。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ServiceLoader&lt;MessageService&gt; serviceServiceLoader = ServiceLoader.load(MessageService.class);</span><br><span class="line"><span class="keyword">for</span> (MessageService messageService : serviceServiceLoader) &#123;</span><br><span class="line">    Log.d(<span class="string">"auto service"</span>, <span class="string">"msg:"</span> + messageService.getMessage());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h2><p>只提供服务接口，具体服务由其他组件实现，接口和具体实现分离，同时能够通过系统的<code>ServiceLoader</code>拿到这些实现类的集合，统一处理。</p>
+<h2 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h2><ul>
+<li>Java中SPI是随jar发布的，每个不同的jar都可以包含一系列的SPI配置，而Android平台上，应用在构建的时候最终会将所有的jar合并，这样很容易造成相同的SPI冲突，常见的问题是DuplicatedZipEntryException异常</li>
+<li>读取SPI配置信息是在运行时从jar包中读取，由于apk是签过名的，在从jar中读取的时候，签名校验的耗时问题会造成性能损失</li>
+<li>在运行时通过反射加载类实例，会造成性能损失</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>在 android 项目中几乎已经见不到 SPI 的使用了，如果想达到组件间通讯同时又减少性能损失，可以使用 APT 在编译时生产成对应的 Service，再通过依赖注入获取到 Service 的实例。不过在 APT 中我们又会使用SPI 技术，所以笔者觉得有必要先讲一下 SPI.</p>
+<p><a href="https://github.com/chinachen01/SPI" target="_blank" rel="noopener">参考 demo</a></p>
+
       
     </div>
     
@@ -988,14 +422,40 @@
 
     <footer class="post-footer">
       
-
+        <div class="post-tags">
+          
+            <a href="/blog/tags/SPI/" rel="tag"># SPI</a>
+          
+        </div>
       
 
       
+      
+      
 
       
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/2019/01/04/Android-Architecture-Components/" rel="next" title="Android Architecture Components">
+                <i class="fa fa-chevron-left"></i> Android Architecture Components
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/2019/01/04/Android-开发之-APT-技术/" rel="prev" title="Android 开发之 APT 技术">
+                Android 开发之 APT 技术 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
       
-        <div class="post-eof"></div>
+
+      
       
     </footer>
   </div>
@@ -1005,10 +465,11 @@
   </article>
 
 
-    
-  </section>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -1016,6 +477,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -1036,8 +501,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -1097,6 +571,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SPI机制"><span class="nav-number">2.</span> <span class="nav-text">SPI机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用"><span class="nav-number">3.</span> <span class="nav-text">使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#定义接口或抽象类"><span class="nav-number">3.1.</span> <span class="nav-text">定义接口或抽象类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现接口"><span class="nav-number">3.2.</span> <span class="nav-text">实现接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建-SPI-描述文件"><span class="nav-number">3.3.</span> <span class="nav-text">创建 SPI 描述文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#调用具体服务"><span class="nav-number">3.4.</span> <span class="nav-text">调用具体服务</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#优点"><span class="nav-number">4.</span> <span class="nav-text">优点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#缺点"><span class="nav-number">5.</span> <span class="nav-text">缺点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -1230,6 +720,10 @@
   
 
   
+  <script type="text/javascript" src="/blog/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/blog/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
