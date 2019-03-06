@@ -7,7 +7,7 @@
 
 <html class="theme-next mist use-motion" lang="zh-Hans">
 <head><meta name="generator" content="Hexo 3.8.0">
-  <meta charset="UTF-8">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="theme-color" content="#222">
@@ -128,7 +128,7 @@
 
 
 
-  <title>阿里巴巴开源路由框架 - ARouter 分析 | Deep in coding</title>
+  <title>阿里巴巴开源路由框架 - ARouter 分析 | Deep in coding</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
 
@@ -147,7 +147,7 @@
     
   
 
-  <div class="container sidebar-position-left page-post-detail">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
@@ -397,10 +397,10 @@
 <h3 id="compiler"><a href="#compiler" class="headerlink" title="compiler"></a>compiler</h3><h4 id="RouteProcessor"><a href="#RouteProcessor" class="headerlink" title="RouteProcessor"></a>RouteProcessor</h4><p>路由注解器</p>
 <p>关键方法 <code>#parseRoutes#</code>,我们先看这个方法最后生成的文件到底是啥，弄清楚了才能更容易的理清代码。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ARouter</span>$$<span class="title">Root</span>$$<span class="title">app</span> <span class="keyword">implements</span> <span class="title">IRouteRoot</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> ARouter$$Root$$app() &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">loadInto</span><span class="params">(Map&lt;String, Class&lt;? extends IRouteGroup&gt;&gt; routes)</span> </span>&#123;</span><br><span class="line">        routes.put(<span class="string">"service"</span>, service.class);</span><br><span class="line">        routes.put(<span class="string">"test"</span>, test.class);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>注意map 存入的key 分别是 service 和 test，valude 则对应为 ARouter$$Group$$service.class 和 ARouter$$Group$$test.class。一个组件有且只有一个 Root 类，不同的组件以后缀作为区分。</p>
+<p>注意map 存入的key 分别是 service 和 test，valude 则对应为 ARouter<script type="math/tex">Group</script>service.class 和 ARouter<script type="math/tex">Group</script>test.class。一个组件有且只有一个 Root 类，不同的组件以后缀作为区分。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ARouter</span>$$<span class="title">Group</span>$$<span class="title">test</span> <span class="keyword">implements</span> <span class="title">IRouteGroup</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> ARouter$$Group$$test() &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">loadInto</span><span class="params">(Map&lt;String, RouteMeta&gt; atlas)</span> </span>&#123;</span><br><span class="line">  		atlas.put(<span class="string">"/test/*"</span>, RouteMeta)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ARouter</span>$$<span class="title">Group</span>$$<span class="title">service</span> <span class="keyword">implements</span> <span class="title">IRouteGroup</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> ARouter$$Group$$service() &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">loadInto</span><span class="params">(Map&lt;String, RouteMeta&gt; atlas)</span> </span>&#123;</span><br><span class="line">   		atlas.put(<span class="string">"/service/*"</span>, RouteMeta)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>注意 Arouter$$Group$$test 中 map 的 key 必然是以 “/test” 为前缀，刚好与其后缀相同</p>
+<p>注意 Arouter<script type="math/tex">Group</script>test 中 map 的 key 必然是以 “/test” 为前缀，刚好与其后缀相同</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ARouter</span>$$<span class="title">Providers</span>$$<span class="title">app</span> <span class="keyword">implements</span> <span class="title">IProviderGroup</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> ARouter$$Providers$$app() &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">loadInto</span><span class="params">(Map&lt;String, RouteMeta&gt; providers)</span> </span>&#123;</span><br><span class="line">        providers.put(className, RouteMeta)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ARouter</span>$$<span class="title">Interceptors</span>$$<span class="title">app</span> <span class="keyword">implements</span> <span class="title">IInterceptorGroup</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> ARouter$$Interceptors$$app() &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">loadInto</span><span class="params">(Map&lt;Integer, Class&lt;? extends IInterceptor&gt;&gt; interceptors)</span> </span>&#123;</span><br><span class="line">        interceptors.put(privority, Class);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>小结一下：</p>
@@ -415,9 +415,9 @@
 <p>接下来将讲解 <code>RouteProcessor#parseRoutes</code> 方法:</p>
 <ol>
 <li>拿到 Route，根据 RouteType 构建 RouteMeta，并通过 #categoryies 方法构建映射关系存储到 groupMap(groupMap 的 key 为 routeName ，value 则是 RouteMeta 集合)</li>
-<li>遍历 groupMap 创建 ARouter\$\$Group\$\$groupName 类, 同时将 groupName 与生成的 File 的全类名的映射关系存储到 rootName</li>
-<li>创建 ARouter\$\$Providers\$\$moduleName 类</li>
-<li>创建 ARouter\$\$Rout\$\$moudleName</li>
+<li>遍历 groupMap 创建 ARouter$$Group$$groupName 类, 同时将 groupName 与生成的 File 的全类名的映射关系存储到 rootName</li>
+<li>创建 ARouter$$Providers$$moduleName 类</li>
+<li>创建 ARouter$$Rout$$moudleName</li>
 </ol>
 <p>其中 groupName  就是你在注解中设置的 group，但我们平时在使用 ARouter 的时候很少回去设置 group, 如果你没有指定 group，Arouter 会默认使用 path 的主路径，比如你指定了 path = “/test/main”, 那 groupName 就是 test; moudleName 则由你在 gradle 中指定。</p>
 <h4 id="AutoWiredProccesor"><a href="#AutoWiredProccesor" class="headerlink" title="AutoWiredProccesor"></a>AutoWiredProccesor</h4><p>首先看一下生成的文件：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test1Activity</span>$$<span class="title">ARouter</span>$$<span class="title">Autowired</span> <span class="keyword">implements</span> <span class="title">ISyringe</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> SerializationService serializationService;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> Test1Activity$$ARouter$$Autowired() &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">inject</span><span class="params">(Object target)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.serializationService = (SerializationService)ARouter.getInstance().navigation(SerializationService.class);</span><br><span class="line">        Test1Activity substitute = (Test1Activity)target;</span><br><span class="line">        substitute.name = substitute.getIntent().getStringExtra(<span class="string">"name"</span>);</span><br><span class="line">       ...</span><br><span class="line">        substitute.helloService = (HelloService)ARouter.getInstance().navigation(HelloService.class);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
@@ -429,7 +429,7 @@
 <li><p><code>AutoWried</code> 注解的 filed 非 <code>service</code>,则从 bundle 中获取相应的 value 赋值给该 field:</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">substitute.helloService = (HelloService)ARouter.getInstance().navigation(HelloService.class); <span class="comment">// activity</span></span><br><span class="line">substitute.name = substitute.getArguments().getString(<span class="string">"name"</span>); <span class="comment">// fragment</span></span><br></pre></td></tr></table></figure>
 </li>
-<li><p>最后生成类名\$\$Arouter\$\$AutoWired.class 文件</p>
+<li><p>最后生成类名$$Arouter$$AutoWired.class 文件</p>
 </li>
 </ol>
 <h4 id="InterceptorProccessor"><a href="#InterceptorProccessor" class="headerlink" title="InterceptorProccessor"></a>InterceptorProccessor</h4><p>拦截注解生成器</p>
@@ -597,7 +597,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -608,7 +608,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/blog/categories/index.html">
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -619,7 +619,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/blog/tags/index.html">
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -1169,6 +1169,28 @@
   
 
   
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
 
   
 
