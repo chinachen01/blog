@@ -89,7 +89,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcgy1g0ro2g6g4wj30hc0d6q8c.jpg">
 <meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1g0t1jhewegj30fe02mgm5.jpg">
-<meta property="og:updated_time" content="2019-03-06T08:17:32.722Z">
+<meta property="og:updated_time" content="2019-03-06T10:00:19.640Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="算法导论-基础知识">
 <meta name="twitter:description" content="算法基础分析算法插入排序 对于少量元素的排序，插入排序是一个有效的算法。插入排序的工作方式像许多人排序一副扑克牌。开始时，我们的左手为空且桌面上的牌牌面向下。然后我们每次从桌面上拿走一张牌将它插入左手中正确的位置。为了找到一张牌的正确位置，我们从右往左将它与已在手中的每一张牌进行比较，如上图所示，这样拿到手中的牌始终是排好序的，代码如下：">
@@ -420,7 +420,8 @@ T(n) = c_1n+c_2(n-1)+c_3(n-1)+c_4({n(n+1)\over2}-1)+c_5({n(n-1)\over2}) + c_6({n
 <p>下面给出<strong>归并排序</strong>的相关代码：</p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 要使该方法正常运作，需要满足一下条件：</span></span><br><span class="line"><span class="comment"> * 1. arrays[start~mid] 为有序</span></span><br><span class="line"><span class="comment"> * 2. arrays[mid+1~end] 为有序</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">merge</span><span class="params">(arrays: <span class="type">Array</span>&lt;<span class="type">Int</span>&gt;, start: <span class="type">Int</span>, mid: <span class="type">Int</span>, end: <span class="type">Int</span>)</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> tmp = arrayOfNulls&lt;<span class="built_in">Int</span>&gt;(end - start + <span class="number">1</span>)</span><br><span class="line">    <span class="keyword">var</span> index = <span class="number">0</span></span><br><span class="line">    <span class="keyword">var</span> leftIndex = start</span><br><span class="line">    <span class="keyword">var</span> rightIndex = mid + <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (leftIndex &lt;= mid &amp;&amp; rightIndex &lt;= end) &#123;</span><br><span class="line">        <span class="keyword">if</span> (arrays[leftIndex] &lt; arrays[rightIndex]) &#123;</span><br><span class="line">            tmp[index] = arrays[leftIndex]</span><br><span class="line">            leftIndex++</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            tmp[index] = arrays[rightIndex]</span><br><span class="line">            rightIndex++</span><br><span class="line">        &#125;</span><br><span class="line">        index++</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (leftIndex &lt;= mid) &#123;</span><br><span class="line">        tmp[index] = arrays[leftIndex]</span><br><span class="line">        leftIndex++</span><br><span class="line">        index++</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (rightIndex &lt;= end) &#123;</span><br><span class="line">        tmp[index] = arrays[rightIndex]</span><br><span class="line">        index++</span><br><span class="line">        rightIndex++</span><br><span class="line">    &#125;</span><br><span class="line">    tmp.forEach &#123;</span><br><span class="line">        print(<span class="string">"===<span class="variable">$it</span>==="</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    println()</span><br><span class="line">    System.arraycopy(tmp, <span class="number">0</span>, arrays, start, tmp.size)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">mergeSort</span><span class="params">(arrays: <span class="type">Array</span>&lt;<span class="type">Int</span>&gt;, start: <span class="type">Int</span>, end: <span class="type">Int</span>)</span></span> &#123;</span><br><span class="line">    <span class="comment">// 跳出递归条件</span></span><br><span class="line">    <span class="keyword">if</span> (start &lt; end) &#123;</span><br><span class="line">        <span class="comment">// 分解</span></span><br><span class="line">        <span class="keyword">val</span> newMid = (end + start) / <span class="number">2</span></span><br><span class="line">        <span class="comment">// 解决: 递归排序</span></span><br><span class="line">        mergeSort(arrays, start, newMid)</span><br><span class="line">        mergeSort(arrays, newMid + <span class="number">1</span>, end)</span><br><span class="line">        <span class="comment">// 合并</span></span><br><span class="line">        merge(arrays, start, newMid, end)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h4 id="分析分治算法"><a href="#分析分治算法" class="headerlink" title="分析分治算法"></a>分析分治算法</h4><p><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1g0t1jhewegj30fe02mgm5.jpg" alt="image-20190306140715419"></p>
-<p>TODO: $T(n)=\theta (nlgn)$ 其中$lgn = log_2n​$</p>
+<p>$T(n)=\theta (nlgn)$ 其中$lgn = log_2n​$</p>
+<h3 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h3><p>刚看完麻省理工公开课第一集，里面提到了算法导论的预备知识，包括《计算科学的数学基础》，还需要懂离散数学和概率论的基础知识以及编程知识。</p>
 
       
     </div>
@@ -460,6 +461,10 @@ T(n) = c_1n+c_2(n-1)+c_3(n-1)+c_4({n(n+1)\over2}-1)+c_5({n(n-1)\over2}) + c_6({n
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/2019/03/07/算法导论-分治策略/" rel="prev" title="算法导论-分治策略">
+                算法导论-分治策略 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -536,7 +541,7 @@ T(n) = c_1n+c_2(n-1)+c_3(n-1)+c_4({n(n+1)\over2}-1)+c_5({n(n-1)\over2}) + c_6({n
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -547,7 +552,7 @@ T(n) = c_1n+c_2(n-1)+c_3(n-1)+c_4({n(n+1)\over2}-1)+c_5({n(n-1)\over2}) + c_6({n
               
               <div class="site-state-item site-state-categories">
                 <a href="/blog/categories/index.html">
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -558,7 +563,7 @@ T(n) = c_1n+c_2(n-1)+c_3(n-1)+c_4({n(n+1)\over2}-1)+c_5({n(n-1)\over2}) + c_6({n
               
               <div class="site-state-item site-state-tags">
                 <a href="/blog/tags/index.html">
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -591,7 +596,7 @@ T(n) = c_1n+c_2(n-1)+c_3(n-1)+c_4({n(n+1)\over2}-1)+c_5({n(n-1)\over2}) + c_6({n
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#算法基础"><span class="nav-number">1.</span> <span class="nav-text">算法基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#分析算法"><span class="nav-number">1.1.</span> <span class="nav-text">分析算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#插入排序"><span class="nav-number">1.1.1.</span> <span class="nav-text">插入排序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#选择排序"><span class="nav-number">1.1.2.</span> <span class="nav-text">选择排序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#冒泡排序"><span class="nav-number">1.1.3.</span> <span class="nav-text">冒泡排序</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设计算法"><span class="nav-number">1.2.</span> <span class="nav-text">设计算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#分治法"><span class="nav-number">1.2.1.</span> <span class="nav-text">分治法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分析分治算法"><span class="nav-number">1.2.2.</span> <span class="nav-text">分析分治算法</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#算法基础"><span class="nav-number">1.</span> <span class="nav-text">算法基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#分析算法"><span class="nav-number">1.1.</span> <span class="nav-text">分析算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#插入排序"><span class="nav-number">1.1.1.</span> <span class="nav-text">插入排序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#选择排序"><span class="nav-number">1.1.2.</span> <span class="nav-text">选择排序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#冒泡排序"><span class="nav-number">1.1.3.</span> <span class="nav-text">冒泡排序</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设计算法"><span class="nav-number">1.2.</span> <span class="nav-text">设计算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#分治法"><span class="nav-number">1.2.1.</span> <span class="nav-text">分治法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分析分治算法"><span class="nav-number">1.2.2.</span> <span class="nav-text">分析分治算法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#后记"><span class="nav-number">1.3.</span> <span class="nav-text">后记</span></a></li></ol></li></ol></div>
             
 
           </div>
