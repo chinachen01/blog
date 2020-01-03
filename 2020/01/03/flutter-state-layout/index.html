@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="APT,">
+  <meta name="keywords" content="flutter,">
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="APT，就是Annotation Processing Tool 的简称，就是可以在代码编译期间对注解进行处理，并且生成Java文件，减少手动的代码输入。一些大名鼎鼎的框架如 Retrofit, Arouter 都运用了 APT 技术。 在本片文章中我们将利用 APT 技术实现类似 ARouter 的路由功能.">
-<meta name="keywords" content="APT">
+<meta name="description" content="flutter state layout前言在 app 中我们经常会遇到这样的场景，进入页面时先发起网络请求从后台获取数据，此时应显示 loading 界面，待数据返回时显示正常的界面，如果发生了网络异常还需要显示 error 界面，并且具有点击重试的机制。 针对这样的场景我们肯定希望能封装一个 widget 来满足这样的需求，在这里分享一个我的 flutter 项目中的 state_layout">
+<meta name="keywords" content="flutter">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Android 开发之 APT 技术">
-<meta property="og:url" content="https://chinachen01.github.io/blog/2019/01/04/Android-开发之-APT-技术/index.html">
+<meta property="og:title" content="flutter state layout">
+<meta property="og:url" content="https://chinachen01.github.io/blog/2020/01/03/flutter-state-layout/index.html">
 <meta property="og:site_name" content="Deep in coding">
-<meta property="og:description" content="APT，就是Annotation Processing Tool 的简称，就是可以在代码编译期间对注解进行处理，并且生成Java文件，减少手动的代码输入。一些大名鼎鼎的框架如 Retrofit, Arouter 都运用了 APT 技术。 在本片文章中我们将利用 APT 技术实现类似 ARouter 的路由功能.">
+<meta property="og:description" content="flutter state layout前言在 app 中我们经常会遇到这样的场景，进入页面时先发起网络请求从后台获取数据，此时应显示 loading 界面，待数据返回时显示正常的界面，如果发生了网络异常还需要显示 error 界面，并且具有点击重试的机制。 针对这样的场景我们肯定希望能封装一个 widget 来满足这样的需求，在这里分享一个我的 flutter 项目中的 state_layout">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-01-04T03:14:39.095Z">
+<meta property="og:updated_time" content="2020-01-03T07:13:24.140Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Android 开发之 APT 技术">
-<meta name="twitter:description" content="APT，就是Annotation Processing Tool 的简称，就是可以在代码编译期间对注解进行处理，并且生成Java文件，减少手动的代码输入。一些大名鼎鼎的框架如 Retrofit, Arouter 都运用了 APT 技术。 在本片文章中我们将利用 APT 技术实现类似 ARouter 的路由功能.">
+<meta name="twitter:title" content="flutter state layout">
+<meta name="twitter:description" content="flutter state layout前言在 app 中我们经常会遇到这样的场景，进入页面时先发起网络请求从后台获取数据，此时应显示 loading 界面，待数据返回时显示正常的界面，如果发生了网络异常还需要显示 error 界面，并且具有点击重试的机制。 针对这样的场景我们肯定希望能封装一个 widget 来满足这样的需求，在这里分享一个我的 flutter 项目中的 state_layout">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="https://chinachen01.github.io/blog/2019/01/04/Android-开发之-APT-技术/">
+  <link rel="canonical" href="https://chinachen01.github.io/blog/2020/01/03/flutter-state-layout/">
 
 
 
 
 
-  <title>Android 开发之 APT 技术 | Deep in coding</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title>flutter state layout | Deep in coding</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
 
@@ -285,7 +285,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://chinachen01.github.io/blog/blog/2019/01/04/Android-开发之-APT-技术/">
+    <link itemprop="mainEntityOfPage" href="https://chinachen01.github.io/blog/blog/2020/01/03/flutter-state-layout/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Yong">
@@ -302,7 +302,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Android 开发之 APT 技术</h1>
+          <h1 class="post-title" itemprop="name headline">flutter state layout</h1>
         
 
         <div class="post-meta">
@@ -314,8 +314,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-04T10:38:04+08:00">
-                2019-01-04
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-03T15:12:13+08:00">
+                2020-01-03
               </time>
             
 
@@ -324,28 +324,6 @@
             
           </span>
 
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
           
 
           
@@ -374,35 +352,24 @@
       
 
       
-        <p>APT，就是Annotation Processing Tool 的简称，就是可以在代码编译期间对注解进行处理，并且生成Java文件，减少手动的代码输入。一些大名鼎鼎的框架如 Retrofit, Arouter 都运用了 APT 技术。</p>
-<p>在本片文章中我们将利用 APT 技术实现类似 <a href="https://github.com/alibaba/ARouter/" target="_blank" rel="noopener">ARouter</a> 的路由功能.</p>
-<a id="more"></a> 
-<p>不多说，先附上本文中的代码地址：<a href="https://github.com/chinachen01/APTdemo" target="_blank" rel="noopener">APTdemo</a></p>
-<p><a href="https://github.com/square/javapoet" target="_blank" rel="noopener">https://github.com/square/javapoet</a></p>
-<h2 id="实现效果"><a href="#实现效果" class="headerlink" title="实现效果"></a>实现效果</h2><p>常用的 Activity 跳转方式：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">startActivity(<span class="keyword">new</span> Intent(MainActivity.<span class="keyword">this</span>, TwoActivity.class));</span><br></pre></td></tr></table></figure>
-<p>我们希望通过以下方式达到 Activity 跳转的目的：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SRouter.getInstance().navigate(MainActivity.<span class="keyword">this</span>, <span class="string">"router_two"</span>);</span><br></pre></td></tr></table></figure>
-<h2 id="注解"><a href="#注解" class="headerlink" title="注解"></a>注解</h2><p>创建<code>annotation</code>library, 首先我们在 library 中定义注解，通过它我们可以找到哪些 Activity 需要添加到路由中</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.CLASS)</span><br><span class="line"><span class="meta">@Target</span>(ElementType.TYPE)</span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Router &#123;</span><br><span class="line">    <span class="function">String <span class="title">name</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="注解处理器-compile"><a href="#注解处理器-compile" class="headerlink" title="注解处理器 - compile"></a>注解处理器 - compile</h2><p>创建<code>compile</code>library,依赖 <code>annotation</code>模块， 注意创建的时候选择 <em>java-libray</em>， 创建<code>RouterProcessor</code>类继承自 AbstractProcessor。我们需要实现 4 个方法，前3个方法简单的写法很固定，简单讲一下他们的作用吧；</p>
-<ol>
-<li>init()方法可以初始化拿到一些使用的工具，比如文件相关的辅助类 Filer;元素相关的辅助类Elements;日志相关的辅助类Messager;</li>
-<li>getSupportedSourceVersion()方法返回 Java 版本; </li>
-<li>getSupportedAnnotationTypes()方法返回要处理的注解；</li>
-</ol>
-<p>其中最核心的是 <code>process()</code>方法，通过<a href="https://github.com/square/javapoet" target="_blank" rel="noopener">javapoet</a> 再结合注解我们就可以成相应的类。 最终我们希望生成的类是这样的：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Router</span>$$<span class="title">GroupApp</span> <span class="keyword">implements</span> <span class="title">IRouterGroup</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Map&lt;String, String&gt; routeMap = <span class="keyword">new</span> HashMap();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> Router$$GroupApp() &#123;</span><br><span class="line">        <span class="keyword">this</span>.routeMap.put(<span class="string">"router_two"</span>, <span class="string">"com.slyser.aptdemo.TwoActivity"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getActivityName</span><span class="params">(String routeName)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span> != <span class="keyword">this</span>.routeMap &amp;&amp; !<span class="keyword">this</span>.routeMap.isEmpty() ? (String)<span class="keyword">this</span>.routeMap.get(routeName) : <span class="string">""</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>实现代码并不复杂，就是写起来很繁琐，还好 <a href="https://github.com/square/javapoet" target="_blank" rel="noopener">javapoet</a> 为我们省了不少事。</p>
-<h2 id="注册注解处理器"><a href="#注册注解处理器" class="headerlink" title="注册注解处理器"></a>注册注解处理器</h2><p>编译的时候 <code>JVM</code> 怎么找到我们自定义的注解处理器？这个时候就要用到 <code>SPI</code> 机制。简单的用法就是在 <code>compile</code> 模块下新建 resources/META-INF/services 文件，创建这个文件很容易出错，大家可以使用 google 出品的 <code>auto-service</code>，通过注解就可以很方便的问我们创建相应的文件</p>
+        <h1 id="flutter-state-layout"><a href="#flutter-state-layout" class="headerlink" title="flutter state layout"></a>flutter state layout</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在 app 中我们经常会遇到这样的场景，进入页面时先发起网络请求从后台获取数据，此时应显示 loading 界面，待数据返回时显示正常的界面，如果发生了网络异常还需要显示 error 界面，并且具有点击重试的机制。</p>
+<p>针对这样的场景我们肯定希望能封装一个 widget 来满足这样的需求，在这里分享一个我的 flutter 项目中的 <code>state_layout</code>给大家。<br><a id="more"></a> </p>
+<h2 id="Future-Builder"><a href="#Future-Builder" class="headerlink" title="Future Builder"></a>Future Builder</h2><p><a href="https://api.flutter.dev/flutter/widgets/FutureBuilder-class.html" target="_blank" rel="noopener">FutureBuilder</a>是官方提供的一个 widget，具体使用可以去查看官方文档。</p>
 <blockquote>
-<p>添加<code>auto-service</code>的 gradle 依赖:implementation ‘com.google.auto.service:auto-service:1.0-rc3’</p>
+<p>Widget that builds itself based on the latest snapshot of interaction with a <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html" target="_blank" rel="noopener">Future</a>.</p>
 </blockquote>
-<h2 id="核心库-api"><a href="#核心库-api" class="headerlink" title="核心库 - api"></a>核心库 - api</h2><p>创建 <code>api</code> library, 该库很简单，就只有 <code>SRouter</code> 一个类，核心就是反射创建注解处理器生成的对象，拿到 Activity 的 Class，完成 activity 的跳转.</p>
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>在 Activity 上添加注解<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Router</span>(name = <span class="string">"router_two"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TwoActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span></span></span><br></pre></td></tr></table></figure></p>
-<p>跳转<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SRouter.getInstance().navigate(<span class="keyword">this</span>, <span class="string">"router_two"</span>);</span><br></pre></td></tr></table></figure></p>
-<p>这样一个简单的路由跳转就完成了</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><code>APT</code>技术其实就是自定义注解和注解处理器，在编译期间生成Java文件，类似于IOC控制反转，可以方便的进行解耦，在多模块开发时可以基于APT技术构造一套路由框架，去除startActivity等造成的类依赖。</p>
+<p>我的这个控件就是基于 <a href="https://api.flutter.dev/flutter/widgets/FutureBuilder-class.html" target="_blank" rel="noopener">FutureBuilder</a> 实现的。</p>
+<h2 id="视图View"><a href="#视图View" class="headerlink" title="视图View"></a>视图View</h2><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LoadingLayout</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="keyword">return</span> SizedBox.expand(</span><br><span class="line">        child: Center(</span><br><span class="line">      child:</span><br><span class="line">          SizedBox(width: <span class="number">40</span>, height: <span class="number">40</span>, child: CircularProgressIndicator()),</span><br><span class="line">    ));</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">EmptyLayout</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="keyword">return</span> SizedBox.expand(</span><br><span class="line">        child: Center(</span><br><span class="line">      child: Text(<span class="string">'-暂无数据-'</span>),</span><br><span class="line">    ));</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ErrorLayout</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="keyword">final</span> <span class="built_in">String</span> errorInfo;</span><br><span class="line">  <span class="keyword">final</span> VoidCallback onError;</span><br><span class="line">  ErrorLayout(&#123;<span class="keyword">this</span>.errorInfo = <span class="string">'出错了!'</span>, <span class="keyword">this</span>.onError&#125;);</span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="keyword">return</span> SizedBox.expand(</span><br><span class="line">      child: Center(</span><br><span class="line">        child: GestureDetector(</span><br><span class="line">          onTap: onError,</span><br><span class="line">          child: Text(errorInfo ?? <span class="string">'出错了!'</span>),</span><br><span class="line">        ),</span><br><span class="line">      ),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>视图 View 的代码很简单，其中错误视图我们需要给它一个点击事件，使它具有重新请求网络的功能。</p>
+<h2 id="核心代码"><a href="#核心代码" class="headerlink" title="核心代码"></a>核心代码</h2><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> SucViewBuilder&lt;T&gt; = Widget <span class="built_in">Function</span>(T data);</span><br><span class="line"><span class="keyword">typedef</span> FutureFuc&lt;T&gt; = Future&lt;T&gt; <span class="built_in">Function</span>();</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">StateLayout</span>&lt;<span class="title">T</span>&gt; <span class="keyword">extends</span> <span class="title">StatefulWidget</span> </span>&#123;</span><br><span class="line">  StateLayout(&#123;<span class="meta">@required</span> <span class="keyword">this</span>.future, <span class="meta">@required</span> <span class="keyword">this</span>.builder, <span class="keyword">this</span>.contoller&#125;);</span><br><span class="line">  <span class="keyword">final</span> FutureFuc&lt;T&gt; future;</span><br><span class="line">  <span class="keyword">final</span> SucViewBuilder&lt;T&gt; builder;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">final</span> StateLayoutContoller contoller;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  _StateLayoutState createState() =&gt; _StateLayoutState&lt;T&gt;();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">_StateLayoutState</span>&lt;<span class="title">T</span>&gt; <span class="keyword">extends</span> <span class="title">State</span>&lt;<span class="title">StateLayout</span>&lt;<span class="title">T</span>&gt;&gt; </span>&#123;</span><br><span class="line">  Future _future;</span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  <span class="keyword">void</span> initState() &#123;</span><br><span class="line">    <span class="keyword">super</span>.initState();</span><br><span class="line">    _future = widget.future();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="keyword">return</span> FutureBuilder&lt;T&gt;(</span><br><span class="line">      <span class="comment">// 这里为什么不直接使用 widget.future()</span></span><br><span class="line">      future: _future,</span><br><span class="line">      builder: (context, snap) &#123;</span><br><span class="line">        <span class="keyword">if</span> (snap.connectionState == ConnectionState.done) &#123;</span><br><span class="line">          <span class="keyword">if</span> (snap.hasError) &#123;</span><br><span class="line">            <span class="keyword">final</span> error = snap.error;</span><br><span class="line">            <span class="keyword">return</span> ErrorLayout(</span><br><span class="line">              onError: onError,</span><br><span class="line">              errorInfo: (error <span class="keyword">is</span> Exception) ? error.toString() : <span class="keyword">null</span>,</span><br><span class="line">            );</span><br><span class="line">          &#125; <span class="keyword">else</span> <span class="keyword">if</span> (snap.hasData &amp;&amp; snap.data != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> widget.builder(snap.data);</span><br><span class="line">          &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> EmptyLayout();</span><br><span class="line">          &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (snap.connectionState == ConnectionState.waiting) &#123;</span><br><span class="line">          <span class="keyword">return</span> LoadingLayout();</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          <span class="keyword">return</span> ErrorLayout(</span><br><span class="line">            onError: onError,</span><br><span class="line">          );</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">void</span> onError() &#123;</span><br><span class="line">    setState(() &#123;</span><br><span class="line">      _future = widget.future();</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>核心代码基本是参照<a href="https://api.flutter.dev/flutter/widgets/FutureBuilder-class.html" target="_blank" rel="noopener">FutureBuilder</a>的官方代码，这里需要特别注意的是<code>FutureBuildler</code>的参数使用的是成员变量 <code>_future</code> 而不是<code>widget.future()</code>。</p>
+<p>在 flutter 中 <code>StateFullWidget</code>的 <code>build</code>方法会在父组件调用 <code>setState</code>或父组件视图树发生变化（比如页面跳转）时调用， <code>build</code>方法多次调用会导致多次闯将 <code>Future</code>实例，在 <code>FutureBuild</code>中则通过对比新旧 <code>future</code>是否相同来订阅 <code>future</code>。</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@override</span></span><br><span class="line"> <span class="keyword">void</span> didUpdateWidget(FutureBuilder&lt;T&gt; oldWidget) &#123;</span><br><span class="line">   <span class="keyword">super</span>.didUpdateWidget(oldWidget);</span><br><span class="line">   <span class="keyword">if</span> (oldWidget.future != widget.future) &#123;</span><br><span class="line">     <span class="keyword">if</span> (_activeCallbackIdentity != <span class="keyword">null</span>) &#123;</span><br><span class="line">       _unsubscribe();</span><br><span class="line">       _snapshot = _snapshot.inState(ConnectionState.none);</span><br><span class="line">     &#125;</span><br><span class="line">     _subscribe();</span><br><span class="line">   &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>所以为了避免出现重复的网络请求和视图变化，所以这里只能使用成员 <code>_future</code>。</p>
+<p>到这里核心功能已经完成了，有时我们需要主动去请求网络更新数据，碰到这种情况我们只需要给 <code>StateLayout</code>增加一个 <code>Controller</code>即可，代码如下：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">StateLayoutContoller</span> </span>&#123;</span><br><span class="line">  <span class="built_in">Function</span> refresh;</span><br><span class="line">  <span class="keyword">void</span> callRefresh() &#123;</span><br><span class="line">    refresh();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">StateLayout</span>&lt;<span class="title">T</span>&gt; <span class="keyword">extends</span> <span class="title">StatefulWidget</span> </span>&#123;</span><br><span class="line"><span class="comment">// 增加 controller</span></span><br><span class="line">	StateLayout(&#123;<span class="meta">@required</span> <span class="keyword">this</span>.future, <span class="meta">@required</span> <span class="keyword">this</span>.builder, <span class="keyword">this</span>.contoller&#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">_StateLayoutState</span>&lt;<span class="title">T</span>&gt; <span class="keyword">extends</span> <span class="title">State</span>&lt;<span class="title">StateLayout</span>&lt;<span class="title">T</span>&gt;&gt; </span>&#123;</span><br><span class="line">  <span class="keyword">void</span> initState() &#123;</span><br><span class="line">    <span class="keyword">super</span>.initState();</span><br><span class="line">    _future = widget.future();</span><br><span class="line">    <span class="comment">// 初始化 controller</span></span><br><span class="line">    <span class="keyword">if</span> (widget.contoller != <span class="keyword">null</span>) &#123;</span><br><span class="line">      widget.contoller.refresh = _refresh;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">void</span> _refresh() &#123;</span><br><span class="line">    setState(() &#123;</span><br><span class="line">      _future = widget.future();</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">@override</span></span><br><span class="line">Widget build(BuildContext context) &#123;</span><br><span class="line">  <span class="keyword">return</span> Scaffold(</span><br><span class="line">    appBar: AppBar(</span><br><span class="line">      title: Text(<span class="string">'state layout'</span>),</span><br><span class="line">    ),</span><br><span class="line">    body: StateLayout&lt;<span class="built_in">int</span>&gt;(</span><br><span class="line">      future: _fetchData,</span><br><span class="line">      builder: (count) &#123;</span><br><span class="line">        <span class="keyword">return</span> Text(<span class="string">'数量是: <span class="subst">$count<span class="string">');</span></span></span></span><br><span class="line"><span class="string"><span class="subst"><span class="string">      &#125;,</span></span></span></span><br><span class="line"><span class="string"><span class="subst"><span class="string">    ),</span></span></span></span><br><span class="line"><span class="string"><span class="subst"><span class="string">  );</span></span></span></span><br><span class="line"><span class="string"><span class="subst"><span class="string">&#125;</span></span></span></span><br><span class="line"><span class="string"><span class="subst"><span class="string"></span></span></span></span><br><span class="line"><span class="string"><span class="subst"><span class="string">Future&lt;int&gt; _fetchData() async &#123;</span></span></span></span><br><span class="line"><span class="string"><span class="subst"><span class="string">  await Future.delayed(Duration(seconds: 2));</span></span></span></span><br><span class="line"><span class="string"><span class="subst"><span class="string">  print('</span></span>fetch data'</span>);</span><br><span class="line">  <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到整个代码很简洁，不需要处理异常，不需要主动去显示 loading 视图或成功视图。最后，本文中的示例代码可以在我的 <a href="https://github.com/chinachen01/flutter_state_layout" target="_blank" rel="noopener">github</a>上找到。</p>
 
       
     </div>
@@ -420,7 +387,7 @@
       
         <div class="post-tags">
           
-            <a href="/blog/tags/APT/" rel="tag"># APT</a>
+            <a href="/blog/tags/flutter/" rel="tag"># flutter</a>
           
         </div>
       
@@ -433,8 +400,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/blog/2019/01/04/SPI-介绍与使用/" rel="next" title="SPI 介绍与使用">
-                <i class="fa fa-chevron-left"></i> SPI 介绍与使用
+              <a href="/blog/2019/07/17/android-记一次打开应用后的通病/" rel="next" title="android 记一次打开应用后的通病">
+                <i class="fa fa-chevron-left"></i> android 记一次打开应用后的通病
               </a>
             
           </div>
@@ -442,10 +409,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/blog/2019/01/04/阿里巴巴开源路由框架-ARouter-分析/" rel="prev" title="阿里巴巴开源路由框架 - ARouter 分析">
-                阿里巴巴开源路由框架 - ARouter 分析 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -577,7 +540,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#实现效果"><span class="nav-number">1.</span> <span class="nav-text">实现效果</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注解"><span class="nav-number">2.</span> <span class="nav-text">注解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注解处理器-compile"><span class="nav-number">3.</span> <span class="nav-text">注解处理器 - compile</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注册注解处理器"><span class="nav-number">4.</span> <span class="nav-text">注册注解处理器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#核心库-api"><span class="nav-number">5.</span> <span class="nav-text">核心库 - api</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用"><span class="nav-number">6.</span> <span class="nav-text">使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">7.</span> <span class="nav-text">总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#flutter-state-layout"><span class="nav-number">1.</span> <span class="nav-text">flutter state layout</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Future-Builder"><span class="nav-number">1.2.</span> <span class="nav-text">Future Builder</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#视图View"><span class="nav-number">1.3.</span> <span class="nav-text">视图View</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#核心代码"><span class="nav-number">1.4.</span> <span class="nav-text">核心代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用"><span class="nav-number">1.5.</span> <span class="nav-text">使用</span></a></li></ol></li></ol></div>
             
 
           </div>
